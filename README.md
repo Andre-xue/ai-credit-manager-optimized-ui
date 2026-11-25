@@ -22,6 +22,7 @@
 - **明暗模式**：C / E / G 使用固定深色画布；其余主题继续响应「跟随系统 / 浅色 / 深色」。关闭「动态效果」或系统开启「减少动态效果」时自动停用视差、光斑与弹性动画。
 - **实现位置**：`src/uiThemes.ts`（主题目录）、`src/theme-gallery.css`（Web 令牌与画廊）、`src/App.tsx`（设置面板与挂载）、`miniapp/theme.wxss` + `miniapp/utils/providers.js`（小程序令牌与切换 API）。所有页面组件与业务数据完全共用，未新增或改动任何接口。
 - **验证**：`npm run build`（`tsc -b && vite build`）通过；`npm test` 87 个测试文件 / 937 个用例全部通过。
+- **CI 说明**：本仓库发布时所用凭据不含 `workflow` 权限，GitHub Actions 配置以 `.github/workflow-templates/` 模板形式完整保留；需要自动构建 / Pages 部署时，在仓库网页端把模板移回 `.github/workflows/` 即可。这不影响任何运行、构建与主题功能。
 
 ---
 
