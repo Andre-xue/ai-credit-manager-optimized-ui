@@ -19,9 +19,23 @@ Page({
     uiTheme: 'aurora',
     uiThemeName: '极光琉璃',
     themePrimary: '#a996ff',
+    themeExpanded: true,
+  },
+
+  onLoad() {
+    try {
+      const v = wx.getStorageSync('acm.themeExpanded')
+      if (typeof v === 'boolean') this.setData({ themeExpanded: v })
+    } catch (_) { /* 存储不可用时保持默认展开 */ }
   },
 
   onShow() { this.syncUiTheme(); this.refresh() },
+
+  toggleThemePanel() {
+    const next = !this.data.themeExpanded
+    this.setData({ themeExpanded: next })
+    try { wx.setStorageSync('acm.themeExpanded', next) } catch (_) { /* 忽略存储失败 */ }
+  },
 
   syncUiTheme() {
     const u = require('../../utils/providers')

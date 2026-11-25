@@ -4,30 +4,35 @@
   <view class="card">
     <view class="section-title">界面外观</view>
     <view class="theme-block">
-      <view class="theme-heading">
+      <view class="theme-heading {{themeExpanded ? '' : 'collapsed'}}" bindtap="toggleThemePanel" hover-class="theme-heading-hover">
         <text class="theme-heading-text">八套全平台主题</text>
-        <text class="theme-current">当前 · {{uiThemeName}}</text>
-      </view>
-      <view class="theme-sub">点击即时切换，选择只保存在本机，不影响账户、额度与用量数据。</view>
-      <view class="theme-grid">
-        <view wx:for="{{themes}}" wx:key="id" class="theme-item {{uiTheme === item.id ? 'active' : ''}}"
-              data-id="{{item.id}}" bindtap="onSelectTheme">
-          <view class="theme-swatch sw-{{item.id}}">
-            <view class="theme-swatch-side"></view>
-            <view class="theme-swatch-main">
-              <view class="sw-bar"></view><view class="sw-bar"></view><view class="sw-bar"></view>
-            </view>
-            <view class="theme-swatch-glow"></view>
-          </view>
-          <view class="theme-item-title">
-            <text>{{item.letter}} · {{item.name}}</text>
-            <text class="theme-tick" wx:if="{{uiTheme === item.id}}">✓</text>
-          </view>
-          <text class="theme-item-desc">{{item.desc}}</text>
-          <text class="theme-item-interaction">{{item.interaction}}</text>
+        <view class="theme-heading-actions">
+          <text class="theme-current">当前 · {{uiThemeName}}</text>
+          <text class="theme-expand-label">{{themeExpanded ? '收起' : '展开'}} {{themeExpanded ? '▴' : '▾'}}</text>
         </view>
       </view>
-      <view class="theme-note">暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；切换会同步更新导航栏与底部标签栏配色，并与其他端共用同一组主题名称。</view>
+      <view wx:if="{{themeExpanded}}" class="theme-panel">
+        <view class="theme-sub">点击即时切换，选择只保存在本机，不影响账户、额度与用量数据。</view>
+        <view class="theme-grid">
+          <view wx:for="{{themes}}" wx:key="id" class="theme-item {{uiTheme === item.id ? 'active' : ''}}"
+                data-id="{{item.id}}" bindtap="onSelectTheme">
+            <view class="theme-swatch sw-{{item.id}}">
+              <view class="theme-swatch-side"></view>
+              <view class="theme-swatch-main">
+                <view class="sw-bar"></view><view class="sw-bar"></view><view class="sw-bar"></view>
+              </view>
+              <view class="theme-swatch-glow"></view>
+            </view>
+            <view class="theme-item-title">
+              <text>{{item.letter}} · {{item.name}}</text>
+              <text class="theme-tick" wx:if="{{uiTheme === item.id}}">✓</text>
+            </view>
+            <text class="theme-item-desc">{{item.desc}}</text>
+            <text class="theme-item-interaction">{{item.interaction}}</text>
+          </view>
+        </view>
+        <view class="theme-note">暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；切换会同步更新导航栏与底部标签栏配色，并与其他端共用同一组主题名称。</view>
+      </view>
     </view>
   </view>
 

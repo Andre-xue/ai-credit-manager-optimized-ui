@@ -5095,6 +5095,14 @@ function SettingsView({ state, onChange, notify, onOpenVault, onClear, onChangeP
   const [bioSwitchPwd, setBioSwitchPwd] = useState('')
   const [bioSwitchBusy, setBioSwitchBusy] = useState(false)
   const [setTab, setSetTab] = useState<'general' | 'data' | 'security'>('general')
+  // ---- 设置页「界面主题」画廊折叠开关（本机记忆） ----
+  const [themeGalleryOpen, setThemeGalleryOpen] = useState<boolean>(() => {
+    try { return localStorage.getItem('acm.themeGalleryOpen') !== '0' } catch { return true }
+  })
+  const toggleThemeGallery = () => setThemeGalleryOpen(open => {
+    try { localStorage.setItem('acm.themeGalleryOpen', open ? '0' : '1') } catch { /* 隐私模式下忽略 */ }
+    return !open
+  })
   // ---- 完整数据备份（导出/导入 JSON 文件） ----
   const backupInputRef = useRef<HTMLInputElement>(null)
   const [pendingImport, setPendingImport] = useState<Extract<ParseBackupResult, { ok: true }> | null>(null)
@@ -5537,38 +5545,52 @@ function SettingsView({ state, onChange, notify, onOpenVault, onClear, onChangeP
               </div>
             </SettingsRow>
             <div className="theme-setting-block">
-              <div className="theme-setting-heading">
-                <div>
-                  <strong>{t('界面主题')}</strong>
-                  <p>{t('八套完整视觉与交互语言，点击即时切换；选择仅保存在本机，不影响任何业务数据。')}</p>
+              <button type="button"
+                className={`theme-setting-heading theme-heading-toggle ${themeGalleryOpen ? 'expanded' : ''}`}
+                onClick={toggleThemeGallery}
+                aria-expanded={themeGalleryOpen}
+                aria-controls="theme-gallery-panel"
+                title={t(themeGalleryOpen ? '收起' : '展开')}>
+                <span className="theme-heading-copy">
+                  <strong>{t('界面主题')}<ChevronDown size={16} className="theme-collapse-chevron" /></strong>
+                  <span className="theme-heading-desc">{themeGalleryOpen
+                    ? t('八套完整视觉与交互语言，点击即时切换；选择仅保存在本机，不影响任何业务数据。')
+                    : t(UI_THEMES.find(theme => theme.id === (s.uiTheme ?? 'aurora'))?.description ?? '极光琉璃')}</span>
+                </span>
+                <span className="theme-heading-actions">
+                  <span className="theme-current-badge">{t('当前')} · {t(UI_THEMES.find(theme => theme.id === (s.uiTheme ?? 'aurora'))?.name ?? '极光琉璃')}</span>
+                  <span className="theme-expand-label">{t(themeGalleryOpen ? '收起' : '展开')}</span>
+                </span>
+              </button>
+              <div id="theme-gallery-panel" className={`theme-gallery-panel ${themeGalleryOpen ? 'open' : ''}`} aria-hidden={!themeGalleryOpen}>
+                <div className="theme-gallery-inner">
+                  <div className="theme-gallery" role="radiogroup" aria-label={t('界面主题')}>
+                    {UI_THEMES.map(theme => {
+                      const selected = (s.uiTheme ?? 'aurora') === theme.id
+                      return (
+                        <button type="button" key={theme.id} role="radio" aria-checked={selected}
+                          className={`theme-choice ${selected ? 'active' : ''}`}
+                          onClick={() => onChange({ uiTheme: theme.id, uiStyle: theme.id === 'aurora' ? 'liquid' : 'claude' })}>
+                          <span className={`theme-preview theme-preview-${theme.id}`} aria-hidden="true">
+                            <span className="theme-preview-side" />
+                            <span className="theme-preview-main"><i /><i /><i /></span>
+                            <span className="theme-preview-glow" />
+                          </span>
+                          <span className="theme-choice-copy">
+                            <span className="theme-choice-title">
+                              <strong>{theme.letter} · {t(theme.name)}</strong>
+                              <span className="theme-selected-mark"><Check size={13} /></span>
+                            </span>
+                            <span className="theme-choice-desc">{t(theme.description)}</span>
+                            <span className="theme-choice-interaction">{t(theme.interaction)}</span>
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <div className="theme-gallery-note">{t('暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；其他主题继续响应上方的明暗模式。关闭动态效果后会停用视差、光斑和弹性动画。')}</div>
                 </div>
-                <span className="theme-current-badge">{t('当前')} · {t(UI_THEMES.find(theme => theme.id === (s.uiTheme ?? 'aurora'))?.name ?? '极光琉璃')}</span>
               </div>
-              <div className="theme-gallery" role="radiogroup" aria-label={t('界面主题')}>
-                {UI_THEMES.map(theme => {
-                  const selected = (s.uiTheme ?? 'aurora') === theme.id
-                  return (
-                    <button type="button" key={theme.id} role="radio" aria-checked={selected}
-                      className={`theme-choice ${selected ? 'active' : ''}`}
-                      onClick={() => onChange({ uiTheme: theme.id, uiStyle: theme.id === 'aurora' ? 'liquid' : 'claude' })}>
-                      <span className={`theme-preview theme-preview-${theme.id}`} aria-hidden="true">
-                        <span className="theme-preview-side" />
-                        <span className="theme-preview-main"><i /><i /><i /></span>
-                        <span className="theme-preview-glow" />
-                      </span>
-                      <span className="theme-choice-copy">
-                        <span className="theme-choice-title">
-                          <strong>{theme.letter} · {t(theme.name)}</strong>
-                          <span className="theme-selected-mark"><Check size={13} /></span>
-                        </span>
-                        <span className="theme-choice-desc">{t(theme.description)}</span>
-                        <span className="theme-choice-interaction">{t(theme.interaction)}</span>
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-              <div className="theme-gallery-note">{t('暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；其他主题继续响应上方的明暗模式。关闭动态效果后会停用视差、光斑和弹性动画。')}</div>
             </div>
             <SettingsRow title="动态效果" desc="抽屉滑入、卡片渐入、光斑浮动等动效">
               <Toggle checked={s.uiMotion !== false} onChange={v => onChange({ uiMotion: v })} />

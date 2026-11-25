@@ -373,16 +373,37 @@ html[data-ui-theme] .modal { border-radius:var(--radius) !important; box-shadow:
 .theme-setting-block {
   padding:18px 20px 20px; border-top:1px solid var(--border);
 }
+/* 可折叠开关：点击整行标题即可展开 / 收起，状态写在本机偏好 */
 .theme-setting-heading {
-  display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+  width:100%; margin:-4px -8px 12px; padding:4px 8px; border:0; border-radius:var(--radius-sm);
+  background:transparent; color:inherit; font:inherit; text-align:left; cursor:pointer;
+  transition:background .18s ease;
 }
-.theme-setting-heading strong { display:block; font-size:14px; font-weight:700; color:var(--text); }
-.theme-setting-heading p { margin:6px 0 0; font-size:12.5px; line-height:1.6; color:var(--text-2); }
+.theme-setting-heading:hover { background:var(--panel-2); }
+.theme-setting-heading:focus-visible { outline:2px solid var(--primary); outline-offset:1px; }
+.theme-heading-copy { display:block; min-width:0; }
+.theme-setting-heading strong { display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--text); }
+.theme-setting-heading p, .theme-heading-desc { display:block; margin:6px 0 0; font-size:12.5px; line-height:1.6; color:var(--text-2); }
+.theme-collapse-chevron { flex:none; color:var(--text-3); transition:transform .28s cubic-bezier(.2,.8,.2,1); }
+.theme-setting-heading.expanded .theme-collapse-chevron { transform:rotate(180deg); }
+.theme-heading-actions { display:flex; align-items:center; gap:10px; flex:none; padding-top:1px; }
+.theme-expand-label { font-size:11.5px; font-weight:700; color:var(--primary); white-space:nowrap; }
 .theme-current-badge {
   flex:none; padding:5px 11px; border-radius:999px; font-size:11.5px; font-weight:700;
   background:var(--primary-soft); color:var(--primary); border:1px solid var(--border);
   white-space:nowrap;
 }
+/* grid-template-rows 0fr→1fr 实现高度平滑过渡；visibility 延后隐藏，收起后不可 Tab 聚焦 */
+.theme-gallery-panel {
+  display:grid; grid-template-rows:0fr; opacity:0; visibility:hidden;
+  transition:grid-template-rows .34s cubic-bezier(.2,.8,.2,1), opacity .24s ease, visibility 0s linear .34s;
+}
+.theme-gallery-panel.open {
+  grid-template-rows:1fr; opacity:1; visibility:visible;
+  transition:grid-template-rows .34s cubic-bezier(.2,.8,.2,1), opacity .24s ease, visibility 0s;
+}
+.theme-gallery-inner { min-height:0; overflow:hidden; }
 .theme-gallery {
   display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px;
 }
@@ -448,10 +469,15 @@ html[data-ui-theme] .modal { border-radius:var(--radius) !important; box-shadow:
 @media (max-width:1180px) { .theme-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:560px) {
   .theme-setting-block { padding:16px 14px 18px; }
-  .theme-setting-heading { flex-direction:column; gap:8px; }
+  .theme-setting-heading { flex-direction:column; gap:8px; margin:0 0 12px; padding:4px 0; }
+  .theme-heading-actions { width:100%; justify-content:space-between; }
   .theme-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
   .theme-preview { height:62px; }
   .theme-choice-interaction { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .theme-gallery-panel, .theme-gallery-panel.open { transition:none; }
+  .theme-collapse-chevron { transition:none; }
 }
 
 /* ---------- 6. 各主题的专属材质与交互层次 ---------- */

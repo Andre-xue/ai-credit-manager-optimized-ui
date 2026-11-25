@@ -136,9 +136,15 @@
 
 /* ---------- 设置页：八套主题选择画廊 ---------- */
 .theme-block { padding:4rpx 0 8rpx; }
-.theme-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:18rpx; }
+.theme-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:18rpx; padding:4rpx 0; }
+.theme-heading.collapsed { margin-bottom:0; }
+.theme-heading-hover { opacity:.65; }
 .theme-heading-text { font-size:28rpx; font-weight:600; color:var(--text); }
+.theme-heading-actions { display:flex; align-items:center; gap:14rpx; }
 .theme-current { font-size:22rpx; color:var(--primary); background:var(--primary-soft); border-radius:999rpx; padding:6rpx 16rpx; }
+.theme-expand-label { font-size:22rpx; font-weight:600; color:var(--primary); white-space:nowrap; }
+.theme-panel { animation:themePanelIn .24s ease-out both; transform-origin:top center; }
+@keyframes themePanelIn { from { opacity:0; transform:translateY(-8rpx); } to { opacity:1; transform:translateY(0); } }
 .theme-sub { font-size:23rpx; color:var(--text-2); line-height:1.6; margin-bottom:20rpx; }
 .theme-grid { display:flex; flex-wrap:wrap; }
 .theme-item {
