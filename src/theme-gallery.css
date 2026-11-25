@@ -465,7 +465,10 @@ html[data-ui-theme='command'] .app-shell::before {
   background-image:linear-gradient(rgba(52,211,153,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(52,211,153,.028) 1px,transparent 1px);
   background-size:36px 36px;
 }
-html[data-ui-theme='command'] .app-shell > * { position:relative; z-index:1; }
+/* 只给内容层提层级，不能命中 fixed 弹窗：否则 position:relative 会覆盖
+   .set-modal-backdrop/.overlay 的 fixed，使弹窗进入 flex 流把主内容挤成竖排窄条 */
+html[data-ui-theme='command'] .app-shell > .sidebar,
+html[data-ui-theme='command'] .app-shell > .main { position:relative; z-index:1; }
 html[data-ui-theme='command'] .stat-card strong { letter-spacing:-.02em; }
 
 /* D · 青屿轻卡片：弹性按压、大触控区域 */
@@ -485,7 +488,8 @@ html[data-ui-theme='aurora'] .app-shell::before {
     radial-gradient(46% 50% at 52% 78%,rgba(123,108,240,.16),transparent 74%);
   filter:blur(28px); animation:auroraDrift 18s ease-in-out infinite alternate;
 }
-html[data-ui-theme='aurora'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='aurora'] .app-shell > .sidebar,
+html[data-ui-theme='aurora'] .app-shell > .main { position:relative; z-index:1; }
 html[data-ui-theme='aurora'] .panel,
 html[data-ui-theme='aurora'] .card,
 html[data-ui-theme='aurora'] .set-card,
@@ -524,7 +528,8 @@ html[data-ui-theme='hud'] .app-shell::after {
   background:linear-gradient(180deg,transparent,rgba(100,255,218,.055),transparent);
   animation:hudScan 9s linear infinite;
 }
-html[data-ui-theme='hud'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='hud'] .app-shell > .sidebar,
+html[data-ui-theme='hud'] .app-shell > .main { position:relative; z-index:1; }
 html[data-ui-theme='hud'] .panel,
 html[data-ui-theme='hud'] .card,
 html[data-ui-theme='hud'] .bento-tile { border-color:rgba(100,255,218,.18) !important; box-shadow:inset 0 0 0 1px rgba(100,255,218,.05),var(--shadow) !important; }
@@ -538,7 +543,8 @@ html[data-ui-theme='editorial'] .app-shell::before {
   background-image:radial-gradient(rgba(120,100,80,.10) .6px,transparent .6px);
   background-size:5px 5px;
 }
-html[data-ui-theme='editorial'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='editorial'] .app-shell > .sidebar,
+html[data-ui-theme='editorial'] .app-shell > .main { position:relative; z-index:1; }
 html[data-ui-theme='editorial'] .bento-greeting h2,
 html[data-ui-theme='editorial'] .topbar-heading h1 { font-weight:600; letter-spacing:-.025em; }
 html[data-ui-theme='editorial'] .set-section + .set-section,
