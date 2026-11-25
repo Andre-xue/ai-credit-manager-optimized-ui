@@ -1,0 +1,516 @@
+/* ============================================================
+   Claude 极简风主题（全平台默认）
+   特征：纯白/浅灰大留白、克制配色、无渐变无毛玻璃、靠排版营造高级感。
+   用户可在偏好设置切到 liquid（液态玻璃）或 classic（经典）。
+   本文件在 styles.css / liquid-glass.css 之后导入，覆盖前者。
+   ============================================================ */
+
+.claude-ui {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-2: #f9f9f8;
+  --border: #ececea;
+  --border-strong: #e0e0dd;
+  --text: #1f2023;
+  --text-2: #6b6c70;
+  --text-3: #9b9c9f;
+  --primary: #5b5bd6;          /* Claude 暖橙棕主色 */
+  --primary-soft: #eef0ff;
+  --primary-hover: #4a4ac2;
+  background: #ffffff;
+  color: var(--text);
+}
+.claude-ui,
+.claude-ui body { letter-spacing: -.01em; }
+
+/* ---------- 全局：去渐变、去玻璃、纯白底 ---------- */
+.claude-ui.app-shell { background: #ffffff; }
+.claude-ui.phone-shell { background: #ffffff !important; }
+.claude-ui.phone-shell::before { display: none !important; }
+.claude-ui .topbar {
+  background: #ffffff !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ---------- 侧栏：浅灰底、紧凑、克制 ---------- */
+.claude-ui .sidebar {
+  background: #f9f9f8 !important;
+  border-right: 1px solid #ececea !important;
+  box-shadow: none !important;
+}
+/* 侧栏布局尺寸与基础风格完全一致（宽度/间距/logo/字号），切换风格不跳变；仅保留配色差异 */
+.claude-ui .brand { border-bottom-color: #ececea; }
+.claude-ui .brand-mark {
+  background: transparent !important;   /* 用 App 图标，去橙色底 */
+  box-shadow: none !important;
+}
+.claude-ui .brand-name { color: var(--text); }
+/* Nav styling is owned by redesign.css (grouped sidebar) */
+.claude-ui .compliance {
+  background: #fffdf5; border-color: #f0e6c8; border-radius: 8px;
+}
+/* 手机端抽屉侧栏在 Claude 风下也用浅灰纯色 */
+.claude-ui.phone-shell .sidebar {
+  background: #f9f9f8 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-right-color: #ececea !important;
+}
+
+/* ---------- 顶栏：极简，弱化 ---------- */
+.claude-ui .topbar { height: 60px; border-bottom-color: #f0f0ee; }
+.claude-ui .topbar h1 { font-size: 16px; font-weight: 600; }
+.claude-ui .topbar .subtitle { display: block; } /* Redesign: 副标题提供页面说明，保留显示 */
+.claude-ui .topbar-actions .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ---------- 卡片/面板：扁平、无强阴影 ---------- */
+.claude-ui .stat-card,
+.claude-ui .panel,
+.claude-ui .set-section,
+.claude-ui .agent-card,
+.claude-ui .account-card {
+  background: #ffffff !important;
+  border: 1px solid #ececea !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-radius: 12px;
+}
+.claude-ui.liquid-ui .stat-card { background: #ffffff !important; }
+/* 品牌/欢迎区图标已改用 App 图标图片，底色统一在文件末尾处理 */
+
+/* ---------- AI 页：Claude 式极简居中布局 ---------- */
+.claude-ui .content-ai { padding: 0 !important; }
+.claude-ui .ai-page { background: #ffffff; }
+.claude-ui .ai-shell {
+  max-width: 780px !important;   /* Claude 对话窄版宽度 */
+  margin: 0 auto;
+  height: calc(100dvh - 24px);
+  min-height: 0;
+}
+/* AI 页隐藏全局顶栏与自带品牌，只留极简模型控件（Claude 顶部只有套餐标签+模型） */
+.claude-ui .topbar-ai { display: flex; }
+.claude-ui .content-ai { margin-top: 0; }
+.claude-ui .ai-topbar {
+  border-bottom: none;
+  padding: 14px 0 8px;
+  justify-content: flex-end;   /* 品牌隐藏后按钮靠右 */
+}
+/* 手机端：为悬浮菜单按钮留位置，避免压住第一个模型下拉 */
+.claude-ui.phone-shell .ai-topbar { padding-left: 58px; }
+.claude-ui.phone-shell .phone-menu-fab { width: 38px; height: 38px; left: 10px; }
+.claude-ui .ai-brand { display: none; }
+.claude-ui .ai-top-actions { gap: 6px; }
+.claude-ui .ai-model-btn {
+  background: #fafafa; border-color: #ececea; color: #55565a;
+  border-radius: 8px; font-size: 12.5px;
+}
+.claude-ui .ai-icon-btn { background: transparent; border-color: transparent; color: #8a8b8e; }
+.claude-ui .ai-icon-btn:hover { color: #1f2023; border-color: transparent; }
+
+/* 欢迎区：大居中问候语 */
+.claude-ui .ai-welcome { max-width: 720px; margin: 12vh auto 0; text-align: center; }
+.claude-ui .ai-welcome-mark {
+  width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 22px;
+  box-shadow: none !important;
+}
+.claude-ui .ai-welcome h2 {
+  font-size: 30px; font-weight: 400; letter-spacing: -.6px;
+  color: #1f2023; margin: 0 0 10px;
+}
+.claude-ui .ai-welcome p { font-size: 13.5px; color: #9b9c9f; margin: 0 0 36px; }
+/* 快捷提示卡：Claude 无卡片，改成极简文字条目 */
+.claude-ui .ai-quick-grid { grid-template-columns: 1fr 1fr; gap: 0 16px; max-width: 620px; margin: 0 auto; }
+.claude-ui .ai-quick-card {
+  background: transparent; border: none; box-shadow: none;
+  padding: 12px 14px; border-radius: 8px; align-items: flex-start;
+  flex-direction: row; gap: 10px; text-align: left;
+}
+.claude-ui .ai-quick-card:hover { background: #f7f7f5; border: none; transform: none; }
+.claude-ui .ai-quick-icon { font-size: 16px; line-height: 1.4; }
+.claude-ui .ai-quick-title { font-size: 13px; font-weight: 500; color: #44454a; }
+.claude-ui .ai-quick-desc { display: none; }
+
+/* 消息区：Claude 纯文本风格（无气泡） */
+.claude-ui .ai-msg-body { max-width: 100%; }
+.claude-ui .ai-bubble {
+  background: transparent !important; border: none !important;
+  box-shadow: none !important; border-radius: 0 !important;
+  padding: 4px 0 !important; color: #2a2b2e; line-height: 1.75;
+}
+.claude-ui .ai-msg.user .ai-bubble {
+  background: #f7f7f5 !important; border-radius: 12px !important; padding: 10px 14px !important;
+}
+.claude-ui .ai-avatar { border-radius: 8px; width: 30px; height: 30px; }
+
+/* 输入区：Claude 圆角大输入框 */
+.claude-ui .ai-compose { padding: 8px 0 4px; border-top: none; }
+.claude-ui .ai-compose-box {
+  border: 1px solid #e3e3e0; border-radius: 16px;
+  padding: 14px 16px 10px; background: #fff;
+  box-shadow: 0 2px 12px rgba(16, 24, 40, .04);
+}
+.claude-ui .ai-compose-box:focus-within {
+  border-color: #d0d0cc; box-shadow: 0 2px 16px rgba(16, 24, 40, .07);
+}
+.claude-ui .ai-textarea { font-size: 14px; }
+.claude-ui .ai-send { background: #1f2023; border-radius: 10px; color: #fff; }
+.claude-ui .ai-send:disabled { background: #e5e5e2; }
+.claude-ui .ai-hint { color: #b0b0ad; }
+.claude-ui .reasoning-btn { background: #fafafa; border-color: #ececea; }
+
+/* ---------- 设置中心：Claude 式居中弹窗 ---------- */
+.claude-ui .set-modal-backdrop {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(24, 24, 27, .38);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: set-fade .18s ease both;
+}
+.claude-ui .set-modal {
+  width: min(920px, 96vw); max-height: min(88vh, 860px);
+  background: #fff; border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 80px rgba(16, 24, 40, .22);
+  animation: set-pop .22s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes set-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes set-pop { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+.claude-ui .set-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid #f0f0ee;
+}
+.claude-ui .set-modal-head h2 { font-size: 16px; font-weight: 600; margin: 0; }
+/* SettingsView 内部：隐藏大 hero（模态头部已是标题） */
+.claude-ui .set-modal-body > .set-hero { display: none; }
+/* 用 flex 左右布局，替代脆弱的 float+margin（真机上会把内容挤成窄条导致文字竖排） */
+.claude-ui .set-modal-body { display: flex; flex-direction: row; min-height: 0; flex: 1; overflow: hidden; }
+.claude-ui .set-tabs {
+  display: flex; flex-direction: column; gap: 2px;
+  flex: 0 0 190px; width: 190px;
+  padding: 16px 10px; margin: 0;
+  background: #f9f9f8; border-right: 1px solid #f0f0ee;
+  box-sizing: border-box; overflow-y: auto;
+}
+.claude-ui .set-tabs button {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 12px; border: none; border-radius: 8px;
+  background: transparent; color: #55565a; font-size: 13px; text-align: left;
+  white-space: nowrap; flex-shrink: 0;
+}
+.claude-ui .set-tabs button.active { background: #ebebe8; color: #1f2023; font-weight: 600; }
+.claude-ui .set-content { flex: 1 1 auto; min-width: 0; padding: 24px 28px 40px; overflow-y: auto; }
+
+/* 手机端：弹窗改为上下布局，分类导航变横向 tab 条，内容全宽 —— 根治窄屏内容被挤成竖排 */
+@media (max-width: 680px) {
+  .claude-ui .set-modal-backdrop { padding: 0; align-items: flex-end; }
+  .claude-ui .set-modal {
+    width: 100%; max-width: 100%; max-height: 92dvh;
+    border-radius: 18px 18px 0 0;
+  }
+  .claude-ui .set-modal-head { padding: 16px 20px; }
+  .claude-ui .set-modal-body { flex-direction: column; }
+  .claude-ui .set-tabs {
+    flex: 0 0 auto; width: 100%; flex-direction: row; gap: 6px;
+    padding: 10px 14px; border-right: none; border-bottom: 1px solid #f0f0ee;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .claude-ui .set-tabs::-webkit-scrollbar { display: none; }
+  .claude-ui .set-tabs button {
+    flex: 0 0 auto; width: auto; padding: 8px 14px; white-space: nowrap;
+  }
+  .claude-ui .set-content { padding: 18px 18px 40px; }
+}
+
+/* 动效关闭：装饰动画由 .motion-ui 移除自动停止（见 motion-effects.css / liquid-glass.css）。
+   这里不再用 * 全局 animation:none——那会连设置切换淡入、果冻开关、提交变形、加载环等
+   功能性反馈动画一起干掉，导致关闭动态效果时闪屏/硬切。 */
+
+/* ============ 品牌/欢迎区图标统一为 App 图标 ============ */
+/* 侧栏品牌区与 AI 欢迎区都用应用自身图标 pwa-512.png，铺满容器、去底色。
+   用 !important 覆盖经典/液态/Claude 各主题的橙色渐变背景。 */
+.brand-mark,
+.ai-welcome-mark {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0;
+  overflow: hidden;
+}
+.app-mark-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
+}
+/* pwa-512 图标自带圆角，容器圆角与它对齐，避免边角露出底色 */
+.brand-mark { border-radius: 9px !important; }
+.ai-welcome-mark { border-radius: 13px !important; }
+
+/* ============================================================
+   AI 聊天页布局（全平台统一，覆盖三种风格与手机/桌面）
+   welcome=刚进入(欢迎居中) / focus=点了输入框(欢迎隐藏,输入框居中) / chat=已对话(输入框贴底)
+   ============================================================ */
+
+/* 页面容器：作为顶栏绝对定位的参照 */
+.ai-page { position: relative; }
+
+/* 顶部栏：固定在 AI 页右上角（玻璃胶囊），welcome/focus/chat 三态位置一致、不随布局居中、不遮挡消息。
+   定位基准是 .ai-page（position:relative），故不受 shell 的 justify-content:center 影响。 */
+.ai-layout-welcome .ai-topbar,
+.ai-layout-focus .ai-topbar,
+.ai-layout-chat .ai-topbar {
+  position: absolute; top: 6px; right: 0; left: 0; z-index: 30;
+  display: flex; justify-content: flex-end; align-items: center;
+  border-bottom: none; padding: 0; min-height: 40px;
+  background: transparent;
+  pointer-events: none; /* 胶囊本身不拦截，只有按钮可点 */
+}
+.ai-layout-welcome .ai-top-actions,
+.ai-layout-focus .ai-top-actions,
+.ai-layout-chat .ai-top-actions {
+  gap: 8px; min-width: 0; pointer-events: auto;
+  padding: 5px 7px; border-radius: 11px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: 0 4px 14px rgba(16, 24, 40, .07);
+}
+
+/* 手机端：三个功能键固定为顶部 App Bar（玻璃胶囊），与左侧悬浮菜单键并排。
+   不随 welcome 居中、不随 chat 跳位，任何布局模式都钉在视口顶部右侧——原生 App 手感 */
+.phone-shell .ai-page.ai-layout-welcome .ai-topbar,
+.phone-shell .ai-page.ai-layout-focus .ai-topbar,
+.phone-shell .ai-page.ai-layout-chat .ai-topbar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 62px; right: 12px;
+  width: auto; max-width: none;
+  height: 42px; min-height: 42px;
+  padding: 0; margin: 0;
+  justify-content: flex-end; align-items: center;
+  background: transparent;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  border: none;
+  overflow: visible;
+  z-index: 46;
+}
+/* 经典风格：实色胶囊 */
+.phone-shell:not(.liquid-ui) .ai-topbar {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(16, 24, 40, .08);
+}
+/* 液态风格：玻璃胶囊（与悬浮菜单键同质感） */
+.phone-shell.liquid-ui .ai-topbar {
+  background: rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .6);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(31, 41, 55, .12), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+/* 按钮区：不再拉伸占满（那是按钮跑到最左边的根源），右对齐、不裁剪 */
+.phone-shell .ai-page .ai-top-actions {
+  flex: 0 0 auto; min-width: 0;
+  overflow: visible;
+  gap: 6px;
+}
+/* 胶囊内按钮去边框、加大触控区 */
+.phone-shell .ai-topbar .ai-icon-btn {
+  width: 36px; height: 36px;
+  border: none; background: transparent;
+}
+.phone-shell .ai-topbar .ai-icon-btn:active { background: rgba(100, 116, 139, .14); }
+
+/* 欢迎区：只留图标+欢迎语，屏幕正中间；去掉描述与快捷卡（JSX 已删） */
+.ai-layout-welcome .ai-welcome,
+.ai-layout-focus .ai-welcome {
+  margin: 0 auto; text-align: center; max-width: 720px;
+}
+.ai-layout-welcome .ai-welcome-mark,
+.ai-layout-focus .ai-welcome-mark { margin: 0 auto 20px; }
+.ai-layout-welcome .ai-welcome h2,
+.ai-layout-focus .ai-welcome h2 { margin: 0; }
+
+/* 输入框上方一行：左=添加附件，右=推理等级 */
+.ai-compose-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.ai-compose-top .ai-icon-btn { flex: 0 0 auto; }
+.ai-compose-top .reasoning-wrap { flex: 0 0 auto; }
+.ai-compose-top .reasoning-btn { white-space: nowrap; }
+
+/* 输入框下方一行：模型分组/模型名/引擎，三分分散、不紧贴也不过远 */
+.ai-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-top: 20px;
+}
+.ai-toolbar .ai-model-btn { flex: 0 0 auto; white-space: nowrap; }
+.ai-toolbar .ai-icon-btn { flex: 0 0 auto; }
+.ai-hint-inline {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-size: 11px; color: var(--text-3); margin-top: 8px;
+}
+
+/* 布局切换：welcome/focus 时输入区在屏幕中间；chat 时消息撑开、输入区贴底 */
+.ai-layout-welcome .ai-shell,
+.ai-layout-focus .ai-shell { justify-content: center; }
+.ai-layout-welcome .ai-messages,
+.ai-layout-focus .ai-messages { flex: 0 0 auto; padding: 0; overflow: visible; }
+/* 聊天模式：顶栏 absolute 占右上角，消息区留顶部补白避免从按钮下方滑过 */
+.ai-layout-chat .ai-messages { flex: 1 1 auto; overflow-y: auto; padding-top: 54px; }
+.ai-layout-chat .ai-compose { flex-shrink: 0; }
+/* 顶栏脱离文档流后，welcome/focus 的欢迎区补回顶部空间 */
+.ai-layout-welcome .ai-shell,
+.ai-layout-focus .ai-shell { padding-top: 52px; }
+.ai-layout-welcome .ai-compose,
+.ai-layout-focus .ai-compose { border-top: none; padding-top: 0; }
+/* welcome/focus：输入框与欢迎语保持适度距离，不紧贴 */
+.ai-layout-welcome .ai-compose,
+.ai-layout-focus .ai-compose { margin-top: 26px; }
+@media (max-width: 680px) {
+  .ai-compose-top { margin-bottom: 12px; }
+  .ai-toolbar { gap: 8px; margin-top: 18px; }
+  .ai-layout-welcome .ai-compose,
+  .ai-layout-focus .ai-compose { margin-top: 20px; }
+}
+
+/* ============================================================
+   极简留白：清除全平台装饰性标语 / 提示文字 / 次要标签
+   保留功能性数据（用户备注、错误提示、状态文案、可操作标签）
+   ============================================================ */
+/* 侧栏品牌副标题、底部合规提示卡 */
+.brand-sub,
+.sidebar-foot,
+.compliance { display: none !important; }
+/* 顶栏副标题 */
+.subtitle { display: none !important; }
+/* 设置页说明文字（section 描述、行描述、note） */
+.set-card-heading p,
+.settings-row-desc,
+.set-note,
+.set-about-note { display: none !important; }
+/* 表单/录入说明文字 */
+.form-hint,
+.desc,
+.stat-hint,
+.hint { display: none !important; }
+/* 语音配置提示（保留红色错误提示） */
+.voice-hint:not([style*="red"]),
+.voice-config-note { display: none !important; }
+/* 附件拖拽提示、引擎说明、通话提示、更新说明 */
+.ap-drop-hint,
+.engine-note,
+.call-hint,
+.upd-hint,
+.upd-notes { display: none !important; }
+/* 工具卡片描述文字（保留分类/地区/月活等可操作标签） */
+.agent-desc { display: none !important; }
+
+/* ============================================================
+   极简留白：侧边栏重新布局
+   菜单项均匀分布铺满侧栏高度，消除上下大块留白；点击区域舒展大气
+   ============================================================ */
+.nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 12px 14px;
+}
+.nav-item {
+  padding: 14px 16px;
+  margin-bottom: 0;
+  font-size: 14.5px;
+}
+
+/* ============================================================
+   手机端 AI 页：下拉菜单 → 底部弹层（Bottom Sheet，原生 App 手感）
+   修复：模型列表伸出屏幕外、要滑动整页才能看到的问题
+   ============================================================ */
+/* 遮罩：桌面端默认隐藏，仅 phone-shell 显示 */
+.ai-menu-backdrop { display: none; }
+.phone-shell .ai-menu-backdrop {
+  display: block;
+  position: fixed; inset: 0; z-index: 290;
+  background: rgba(17, 24, 39, .35);
+  animation: ai-sheet-fade .2s ease both;
+}
+@keyframes ai-sheet-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 三种下拉统一改为固定底部弹层：不再受父容器裁剪/伸出屏幕 */
+.phone-shell .ai-model-menu,
+.phone-shell .reasoning-menu {
+  position: fixed;
+  left: 10px; right: 10px; top: auto; bottom: 0;
+  max-width: none; max-height: 62vh;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  border-radius: 18px 18px 0 0;
+  border: none;
+  padding: 26px 12px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  box-shadow: 0 -12px 44px rgba(16, 24, 40, .22);
+  z-index: 300;
+  animation: ai-sheet-up .3s cubic-bezier(.22, 1, .36, 1) both !important;
+}
+@keyframes ai-sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+/* 顶部抓手指示条 */
+.phone-shell .ai-model-menu::before,
+.phone-shell .reasoning-menu::before {
+  content: '';
+  position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+  width: 42px; height: 4.5px; border-radius: 3px;
+  background: rgba(100, 116, 139, .35);
+}
+/* 液态风格：玻璃弹层 */
+.phone-shell.liquid-ui .ai-model-menu,
+.phone-shell.liquid-ui .reasoning-menu {
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+/* 选项加大触控区，左右分布（名称 | 分组标签） */
+.phone-shell .ai-model-option {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 13px 14px !important;
+  font-size: 14.5px; border-radius: 12px;
+}
+.phone-shell .ai-model-option small { font-size: 11px; flex-shrink: 0; }
+.phone-shell .ai-model-empty { padding: 26px 14px; font-size: 13.5px; text-align: center; }
+.phone-shell .reasoning-option { padding: 12px 14px !important; }
+.phone-shell .reasoning-option-label { font-size: 14.5px; }
+.phone-shell .reasoning-option small { font-size: 12px; }
+/* 动态效果关闭时不播弹层动画 */
+@media (prefers-reduced-motion: reduce) {
+  .phone-shell .ai-model-menu,
+  .phone-shell .reasoning-menu { animation: none !important; }
+  .phone-shell .ai-menu-backdrop { animation: none; }
+}
+
+/* 手机端 AI 页：禁用页面级入场动画残留的 transform。
+   关键：transform 会把 position:fixed 的基准从视口变成 ai-page，
+   导致顶部 App Bar 与底部弹层全部错位（transform: none 是修复的根基） */
+.phone-shell .ai-page { transform: none !important; animation: none !important; }
+
+/* 手机端 AI 页：恢复内容区 padding（claude-ui 的 .content-ai padding:0!important 加载更晚，
+   会覆盖 liquid-glass 的让位规则，故必须在文件末尾以同优先级重申），
+   同时清掉桌面端的居中窄栏 margin/max-width */
+.phone-shell .content-ai {
+  padding: calc(env(safe-area-inset-top, 0px) + 58px) 14px calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: auto !important;
+}
+
+/* ---------- 深色主题适配（v0.1.316）：AI 对话区 ----------
+   本层把气泡文字写死 #2a2b2e、输入框写死白底，只适配了浅色；深色下页面底色
+   已切到 var(--bg)，于是助手文字「深压深」、输入文字「浅压白」都看不见。
+   这里用主题变量补齐深色配色，经典与液态玻璃两种风格共用本层、同时生效。 */
+:root[data-theme="dark"] .claude-ui .ai-bubble { color: var(--text); }
+:root[data-theme="dark"] .claude-ui .ai-msg.user .ai-bubble { background: var(--panel-2) !important; color: var(--text); }
+:root[data-theme="dark"] .claude-ui .ai-compose-box { background: var(--panel); border-color: var(--border-strong); }
+:root[data-theme="dark"] .claude-ui .ai-textarea { color: var(--text); }
+:root[data-theme="dark"] .claude-ui .ai-hint { color: var(--text-3); }
+:root[data-theme="dark"] .claude-ui .ai-send:disabled { background: var(--panel-2); color: var(--text-3); }
+:root[data-theme="dark"] .claude-ui .reasoning-btn { background: var(--panel-2); border-color: var(--border); color: var(--text); }
+:root[data-theme="dark"] .claude-ui .ai-quick-title { color: var(--text); }
+:root[data-theme="dark"] .claude-ui .ai-quick-card:hover { background: var(--panel-2); }

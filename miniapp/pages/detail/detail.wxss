@@ -1,0 +1,1 @@
+.item .logo { width: 64rpx; height: 64rpx; border-radius: 22rpx; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22rpx; font-weight: 700; flex-shrink: 0; }

@@ -1,0 +1,82 @@
+<view class="container ui-{{uiTheme}}">
+  <view class="bento">
+    <view class="bento-main">
+      <view class="bento-label">本月费用（{{month}}）</view>
+      <view class="bento-big">¥{{totalCost}}</view>
+      <view class="bento-sub">共 {{recordCount}} 条记录 · 本地估算</view>
+      <view class="bento-cta" bindtap="openForm">+ 记一笔</view>
+    </view>
+    <view class="bento-tile bento-amber">
+      <view class="bento-label">本月 Tokens</view>
+      <view class="bento-num">{{totalTokens}}</view>
+      <view class="bento-sub">输入 + 输出</view>
+    </view>
+    <view class="bento-tile">
+      <view class="bento-label">预算使用</view>
+      <view class="bento-num">{{budgetPct}}<text class="bento-unit">%</text></view>
+      <view class="bento-sub">{{budget ? '预算 ¥' + budget : '未设置预算'}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{budget}}" class="progress" style="margin-top:20rpx">
+    <view class="progress-bar" style="width:{{budgetPct}}%;background:{{budgetPct >= 90 ? 'var(--red)' : 'var(--primary)'}}"></view>
+  </view>
+
+  <view class="section-head">
+    <view class="title">按平台消费</view>
+  </view>
+  <view class="card">
+    <block wx:if="{{platforms.length === 0}}">
+      <view class="hint" style="padding:12rpx 0">本月暂无消费记录，点「记一笔」添加</view>
+    </block>
+    <view wx:for="{{platforms}}" wx:key="pid" style="margin-bottom:18rpx">
+      <view class="row between" style="font-size:26rpx;margin-bottom:8rpx">
+        <view class="row"><view class="p-logo p-logo-img" wx:if="{{item.pid != 'unknown'}}"><image src="/assets/logos/{{item.pid}}.png" mode="aspectFit" /></view><view class="p-logo" wx:else style="background:{{item.color}}">{{item.name[0]}}</view><text style="margin-left:10rpx">{{item.name}}</text></view>
+        <text style="color:var(--text-3)">¥{{item.cost}} · {{item.tokens}} tokens</text>
+      </view>
+      <view class="progress"><view class="progress-bar" style="width:{{item.share}}%;background:var(--primary)"></view></view>
+    </view>
+  </view>
+
+  <view class="section-head">
+    <view class="title">最近记录</view>
+    <view class="btn primary" bindtap="openForm">+ 记一笔</view>
+  </view>
+  <block wx:if="{{records.length === 0}}">
+    <view class="card empty"><view class="hint">暂无用量记录</view></view>
+  </block>
+  <view class="card" wx:for="{{records}}" wx:key="id" style="padding:20rpx 24rpx">
+    <view class="row between">
+      <view>
+        <view style="font-size:27rpx;font-weight:600">{{item.accountLabel}}<text wx:if="{{item.model}}" class="hint" style="margin-left:10rpx">{{item.model}}</text></view>
+        <view class="hint" style="margin-top:6rpx">{{item.date}} · {{item.tokens}} tokens（入 {{item.inputTokens}} / 出 {{item.outputTokens}}）</view>
+      </view>
+      <view style="text-align:right">
+        <view style="font-size:28rpx;font-weight:650">¥{{item.costText}}</view>
+        <view class="hint" style="margin-top:6rpx;color:var(--red)" data-id="{{item.id}}" bindtap="removeRecord">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showForm}}" class="mask" bindtap="closeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="section-title">记一笔用量</view>
+      <view class="field-label">账户</view>
+      <picker mode="selector" range="{{accounts}}" range-key="label" value="{{formAccountIndex}}" bindchange="onFormAccount">
+        <view class="btn">{{accounts[formAccountIndex].label}} ▾</view>
+      </picker>
+      <view class="field-label">模型（可选）</view>
+      <input class="input" value="{{formModel}}" bindinput="onFormModel" placeholder="如 deepseek-chat" />
+      <view class="field-label">输入 Tokens</view>
+      <input class="input" type="number" value="{{formIn}}" bindinput="onFormIn" placeholder="0" />
+      <view class="field-label">输出 Tokens</view>
+      <input class="input" type="number" value="{{formOut}}" bindinput="onFormOut" placeholder="0" />
+      <view class="field-label">费用（元，可选）</view>
+      <input class="input" type="digit" value="{{formCost}}" bindinput="onFormCost" placeholder="留空按参考单价估算" />
+      <view class="row" style="gap:16rpx;margin-top:32rpx">
+        <view class="btn" style="flex:1" bindtap="closeForm">取消</view>
+        <view class="btn primary" style="flex:1" bindtap="saveRecord">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,9 @@
+.section-title { font-size: 28rpx; font-weight: 600; margin-bottom: 12rpx; padding-bottom: 12rpx; border-bottom: 1rpx solid var(--border); }
+.setting-row { padding: 20rpx 0; border-bottom: 1rpx solid var(--border); }
+.setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+.budget-input { width: 160rpx; text-align: right; border: 1rpx solid var(--border); border-radius: 12rpx; padding: 10rpx 16rpx; font-size: 26rpx; }
+.kv { padding: 14rpx 0; font-size: 26rpx; border-bottom: 1rpx solid var(--border); }
+.kv:last-child { border-bottom: none; }
+.mask { position: fixed; inset: 0; background: rgba(17,24,39,.5); z-index: 100; display: flex; align-items: center; justify-content: center; }
+.confirm { width: 80%; background: var(--panel); border-radius: 24rpx; padding: 40rpx; }
+.title { font-size: 32rpx; font-weight: 600; }

@@ -1,0 +1,26 @@
+/* 用量统计页：与首页同一套 Bento 设计语言（配色由 ui-* 主题变量驱动） */
+.bento { display: flex; flex-wrap: wrap; gap: 20rpx; margin-bottom: 8rpx; }
+.bento-main {
+  width: 100%; box-sizing: border-box; border-radius: 40rpx; padding: 36rpx;
+  background: linear-gradient(135deg, var(--grad-a), var(--grad-b) 58%, var(--grad-c)); color: #fff;
+  box-shadow: 0 20rpx 44rpx var(--glow);
+}
+.bento-tile { flex: 1; box-sizing: border-box; border-radius: 36rpx; padding: 28rpx; min-width: 0; background: var(--panel); border: 1rpx solid var(--border); }
+.bento-amber { background: var(--amber-soft); border: 1rpx solid var(--border-strong); color: var(--amber); }
+.bento-label { font-size: 24rpx; font-weight: 600; opacity: .75; }
+.bento-big { font-size: 64rpx; font-weight: 800; line-height: 1.15; margin-top: 10rpx; }
+.bento-num { font-size: 44rpx; font-weight: 800; line-height: 1.2; margin-top: 8rpx; }
+.bento-unit { font-size: 26rpx; font-weight: 600; opacity: .65; }
+.bento-sub { font-size: 23rpx; opacity: .75; margin-top: 8rpx; }
+.bento-cta {
+  display: inline-flex; margin-top: 26rpx; background: var(--panel); color: var(--primary);
+  font-size: 25rpx; font-weight: 700; padding: 14rpx 30rpx; border-radius: 999rpx;
+}
+.section-head { display: flex; align-items: center; justify-content: space-between; margin: 32rpx 0 20rpx; }
+.section-title { font-size: 30rpx; font-weight: 600; margin-bottom: 12rpx; color: var(--text); }
+.p-logo { width: 40rpx; height: 40rpx; border-radius: 12rpx; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18rpx; font-weight: 700; flex-shrink: 0; }
+.mask { position: fixed; inset: 0; background: rgba(17,24,39,.5); z-index: 100; display: flex; align-items: flex-end; }
+.sheet { width: 100%; background: var(--panel); border-radius: 44rpx 44rpx 0 0; padding: 40rpx 32rpx 60rpx; max-height: 88vh; overflow-y: auto; }
+.field-label { font-size: 24rpx; font-weight: 500; color: var(--text); margin: 24rpx 0 12rpx; }
+.field-label:first-child { margin-top: 0; }
+.input { width: 100%; box-sizing: border-box; padding: 20rpx 22rpx; border: 1rpx solid var(--border); border-radius: 20rpx; font-size: 26rpx; background: var(--panel); color: var(--text); }

@@ -1,0 +1,257 @@
+/* ============================================================
+   AI 魔方 · 全局液态玻璃（Liquid Glass）界面（v0.1.294）
+   设置 → 外观设计 → 界面风格 = 液态玻璃时，App 根节点带 .liquid-ui，
+   本文件作为最后一层样式覆盖材质：彩色光晕背景 + 面板毛玻璃透光、
+   高光描边、大圆角、悬浮阴影（苹果 iOS 26 / macOS 26 设计语言的 CSS 近似）。
+   经典风格（无 .liquid-ui）完全不受影响。
+   Mac 桌面端另有系统毛玻璃增强：html.sys-glass 时窗口底材换成系统
+   NSVisualEffectView（由 Rust set_window_glass 命令开关），本文件只把
+   壳与侧边栏的底色调透，让系统材质透上来。
+   ============================================================ */
+
+/* ---------- 1. 壳背景：彩色光晕网格 ---------- */
+.app-shell.liquid-ui {
+  background:
+    radial-gradient(55% 42% at 16% 8%, rgba(129, 140, 248, .34), transparent 70%),
+    radial-gradient(48% 38% at 84% 16%, rgba(244, 114, 182, .26), transparent 70%),
+    radial-gradient(58% 46% at 72% 86%, rgba(45, 212, 191, .28), transparent 70%),
+    radial-gradient(48% 42% at 20% 80%, rgba(96, 165, 250, .26), transparent 70%),
+    linear-gradient(160deg, #edf0ff 0%, #f8f3ff 42%, #ecfaf5 78%, #f2f6ff 100%);
+}
+html:has(.app-shell.liquid-ui) body { background: #eef1ff; }
+/* 手机壳：claude-ui 曾用 !important 把壳刷白、把光斑层关掉，液态模式下恢复 */
+.app-shell.phone-shell.liquid-ui {
+  background:
+    radial-gradient(55% 42% at 16% 8%, rgba(129, 140, 248, .34), transparent 70%),
+    radial-gradient(48% 38% at 84% 16%, rgba(244, 114, 182, .26), transparent 70%),
+    radial-gradient(58% 46% at 72% 86%, rgba(45, 212, 191, .28), transparent 70%),
+    linear-gradient(160deg, #edf0ff 0%, #f8f3ff 42%, #ecfaf5 100%) !important;
+}
+.app-shell.claude-ui.phone-shell.liquid-ui::before { display: block !important; }
+
+/* ---------- 1b. 文字对比度（液态专用） ----------
+   玻璃是半透明的、背后还有彩色光晕，经典模式够用的浅灰次级文字
+   （--text-3 原值 #98a2b3）在液态下会被底色吃掉。液态作用域内整体
+   加深次级/三级文字（深色模式则整体提亮），经典模式不受影响。
+   Ethan 2026-11-21 明确要求：液态下文字对比度要够。 */
+.app-shell.liquid-ui {
+  --text-2: #2e3547;
+  --text-3: #4d5871;
+}
+.app-shell.liquid-ui ::placeholder { color: #4d5871; opacity: 1; }
+:root[data-theme="dark"] .app-shell.liquid-ui {
+  --text-2: #ccd4e2;
+  --text-3: #a9b3c7;
+}
+:root[data-theme="dark"] .app-shell.liquid-ui ::placeholder { color: #a9b3c7; }
+
+/* ---------- 2. 玻璃表面（浅色） ---------- */
+.app-shell.liquid-ui .sidebar {
+  background: rgba(255, 255, 255, .5) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border-right: 1px solid rgba(255, 255, 255, .55);
+  box-shadow: 12px 0 36px rgba(80, 70, 180, .07);
+}
+.app-shell.liquid-ui .topbar {
+  background: rgba(255, 255, 255, .48) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, .5);
+}
+.app-shell.claude-ui.liquid-ui .stat-card,
+.app-shell.claude-ui.liquid-ui .panel,
+.app-shell.claude-ui.liquid-ui .set-section,
+.app-shell.claude-ui.liquid-ui .agent-card,
+.app-shell.claude-ui.liquid-ui .account-card,
+.app-shell.liquid-ui .card,
+.app-shell.liquid-ui .set-card,
+.app-shell.liquid-ui .gen-panel,
+.app-shell.liquid-ui .onboarding-card,
+.app-shell.liquid-ui .sd-block {
+  background: rgba(255, 255, 255, .66) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(155%);
+  backdrop-filter: blur(18px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, .65);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(80, 70, 180, .09), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+/* 看板彩色磁贴：保留各自色调、只把底色调成半透明（主磁贴的紫色渐变是品牌位，
+   绝不能被玻璃白覆盖——否则白字白底看不见，v0.1.294 首测实测） */
+.app-shell.liquid-ui .bento-tile {
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: 0 10px 28px rgba(80, 70, 180, .08), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+.app-shell.liquid-ui .bento-tile:not(.bento-main):not(.bento-amber):not(.bento-red):not(.bento-green):not(.bento-blue):not(.bento-violet):not(.bento-teal) { background: rgba(255, 255, 255, .55); }
+.app-shell.liquid-ui .bento-amber { background: rgba(255, 250, 235, .62); }
+.app-shell.liquid-ui .bento-red { background: rgba(254, 243, 242, .62); }
+.app-shell.liquid-ui .bento-green { background: rgba(236, 253, 243, .62); }
+.app-shell.liquid-ui .bento-blue { background: rgba(239, 248, 255, .62); }
+.app-shell.liquid-ui .bento-violet { background: rgba(245, 243, 255, .62); }
+.app-shell.liquid-ui .bento-teal { background: rgba(240, 253, 250, .62); }
+.app-shell.liquid-ui .modal,
+.app-shell.liquid-ui .set-modal {
+  background: rgba(255, 255, 255, .72);
+  -webkit-backdrop-filter: blur(26px) saturate(165%);
+  backdrop-filter: blur(26px) saturate(165%);
+  border: 1px solid rgba(255, 255, 255, .7);
+  box-shadow: 0 28px 90px rgba(50, 40, 140, .22), inset 0 1px 0 rgba(255, 255, 255, .85);
+}
+.app-shell.liquid-ui .modal-foot { background: rgba(255, 255, 255, .35); }
+.app-shell.liquid-ui .set-modal-backdrop,
+.app-shell.liquid-ui .modal-backdrop {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+.app-shell.liquid-ui .ai-model-menu,
+.app-shell.liquid-ui .cmdk-panel,
+.app-shell.liquid-ui .toast {
+  background: rgba(255, 255, 255, .66);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .65);
+  box-shadow: 0 18px 50px rgba(80, 70, 180, .16), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+/* toast 基础样式是黑底白字；液态浅色下底换成浅玻璃，字必须换深色，
+   否则提示文字看不清（v0.1.294 实机录屏坐实）。深色下 --text 为浅色、
+   玻璃底为深色，同一条规则同样成立 */
+.app-shell.liquid-ui .toast { color: var(--text); }
+/* 失败 toast：液态主题下同样走深红底白字，不跟成功提示混淆（v0.1.385） */
+.app-shell.liquid-ui .toast.err { background: rgba(153, 27, 27, .92); color: #fff; border-color: rgba(254, 202, 202, .4); }
+.app-shell.liquid-ui .toast.err svg { color: #fecaca; }
+
+/* ---------- 3. 控件 ---------- */
+.app-shell.liquid-ui .btn:not(.primary) {
+  background: rgba(255, 255, 255, .5);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(255, 255, 255, .6);
+  box-shadow: 0 4px 14px rgba(80, 70, 180, .08), inset 0 1px 0 rgba(255, 255, 255, .75);
+}
+.app-shell.liquid-ui .btn:not(.primary):hover { background: rgba(255, 255, 255, .72); border-color: rgba(255, 255, 255, .8); }
+.app-shell.liquid-ui .input,
+.app-shell.liquid-ui .select,
+.app-shell.liquid-ui textarea.input {
+  background: rgba(255, 255, 255, .48);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(255, 255, 255, .55);
+}
+.app-shell.liquid-ui .seg-control {
+  background: rgba(255, 255, 255, .38);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, .5);
+}
+.app-shell.liquid-ui .seg-btn.active {
+  background: rgba(255, 255, 255, .88);
+  /* 基础样式里 active 是紫底白字；液态下底色换成近白玻璃，字必须跟着换深色，
+     否则白字白底看不见（v0.1.294 实机截图坐实） */
+  color: var(--text);
+  box-shadow: 0 3px 10px rgba(80, 70, 180, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+.app-shell.liquid-ui .nav-item.active {
+  background: rgba(255, 255, 255, .62);
+  box-shadow: 0 4px 14px rgba(80, 70, 180, .10), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+.app-shell.liquid-ui .nav-item:hover { background: rgba(255, 255, 255, .4); }
+
+.app-shell.liquid-ui .onboarding-step { background: rgba(255, 255, 255, .45); }
+:root[data-theme="dark"] .app-shell.liquid-ui .onboarding-step { background: rgba(255, 255, 255, .05); }
+
+/* ---------- 4. AI 助手页：底色透光 ---------- */
+.app-shell.liquid-ui .ai-page { background: transparent; }
+.app-shell.liquid-ui .ai-quick-card {
+  background: rgba(255, 255, 255, .45);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, .55);
+}
+.app-shell.liquid-ui table { background: transparent; }
+
+/* ---------- 5. 深色模式 ---------- */
+:root[data-theme="dark"] .app-shell.liquid-ui {
+  background:
+    radial-gradient(55% 42% at 16% 8%, rgba(99, 102, 241, .30), transparent 70%),
+    radial-gradient(48% 38% at 84% 16%, rgba(219, 39, 119, .20), transparent 70%),
+    radial-gradient(58% 46% at 72% 86%, rgba(13, 148, 136, .22), transparent 70%),
+    radial-gradient(48% 42% at 20% 80%, rgba(37, 99, 235, .22), transparent 70%),
+    linear-gradient(160deg, #14161f 0%, #1a1526 45%, #0f1a17 100%);
+}
+:root[data-theme="dark"] html:has(.app-shell.liquid-ui) body,
+html[data-theme="dark"]:has(.app-shell.liquid-ui) body { background: #14161f; }
+:root[data-theme="dark"] .app-shell.liquid-ui .sidebar {
+  background: rgba(22, 24, 34, .5) !important;
+  border-right-color: rgba(255, 255, 255, .13);
+  box-shadow: 12px 0 36px rgba(0, 0, 0, .3);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .topbar {
+  background: rgba(22, 24, 34, .52) !important;
+  border-bottom-color: rgba(255, 255, 255, .12);
+}
+:root[data-theme="dark"] .app-shell.claude-ui.liquid-ui .stat-card,
+:root[data-theme="dark"] .app-shell.claude-ui.liquid-ui .panel,
+:root[data-theme="dark"] .app-shell.claude-ui.liquid-ui .set-section,
+:root[data-theme="dark"] .app-shell.claude-ui.liquid-ui .agent-card,
+:root[data-theme="dark"] .app-shell.claude-ui.liquid-ui .account-card,
+:root[data-theme="dark"] .app-shell.liquid-ui .card,
+:root[data-theme="dark"] .app-shell.liquid-ui .set-card,
+:root[data-theme="dark"] .app-shell.liquid-ui .bento-tile,
+:root[data-theme="dark"] .app-shell.liquid-ui .gen-panel,
+:root[data-theme="dark"] .app-shell.liquid-ui .onboarding-card,
+:root[data-theme="dark"] .app-shell.liquid-ui .sd-block {
+  background: rgba(26, 28, 40, .55) !important;
+  border-color: rgba(255, 255, 255, .13);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .32), inset 0 1px 0 rgba(255, 255, 255, .09);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .modal,
+:root[data-theme="dark"] .app-shell.liquid-ui .set-modal {
+  background: rgba(28, 30, 44, .68);
+  border-color: rgba(255, 255, 255, .15);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .modal-foot { background: rgba(255, 255, 255, .05); }
+:root[data-theme="dark"] .app-shell.liquid-ui .ai-model-menu,
+:root[data-theme="dark"] .app-shell.liquid-ui .cmdk-panel,
+:root[data-theme="dark"] .app-shell.liquid-ui .toast {
+  background: rgba(28, 30, 44, .62);
+  border-color: rgba(255, 255, 255, .14);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .09);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .btn:not(.primary) {
+  background: rgba(30, 32, 46, .5);
+  border-color: rgba(255, 255, 255, .13);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .btn:not(.primary):hover { background: rgba(40, 43, 60, .62); }
+:root[data-theme="dark"] .app-shell.liquid-ui .input,
+:root[data-theme="dark"] .app-shell.liquid-ui .select,
+:root[data-theme="dark"] .app-shell.liquid-ui textarea.input {
+  background: rgba(30, 32, 46, .48);
+  border-color: rgba(255, 255, 255, .12);
+}
+:root[data-theme="dark"] .app-shell.liquid-ui .seg-control { background: rgba(30, 32, 46, .42); border-color: rgba(255, 255, 255, .1); }
+:root[data-theme="dark"] .app-shell.liquid-ui .seg-btn.active { background: rgba(64, 68, 92, .85); color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, .3); }
+:root[data-theme="dark"] .app-shell.liquid-ui .nav-item.active { background: rgba(255, 255, 255, .1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1); }
+:root[data-theme="dark"] .app-shell.liquid-ui .nav-item:hover { background: rgba(255, 255, 255, .06); }
+:root[data-theme="dark"] .app-shell.liquid-ui .ai-quick-card { background: rgba(30, 32, 46, .45); border-color: rgba(255, 255, 255, .12); }
+
+/* ---------- 6. Mac 系统毛玻璃增强（桌面液态模式专属） ----------
+   窗口底材是系统 NSVisualEffectView：壳只铺一层半透明色调让桌面
+   磨砂透上来，侧边栏近乎全透以呈现系统 Sidebar 材质。 */
+html.sys-glass .app-shell.liquid-ui {
+  background:
+    radial-gradient(55% 42% at 16% 8%, rgba(129, 140, 248, .20), transparent 70%),
+    radial-gradient(48% 38% at 84% 16%, rgba(244, 114, 182, .15), transparent 70%),
+    radial-gradient(58% 46% at 72% 86%, rgba(45, 212, 191, .16), transparent 70%),
+    rgba(238, 240, 255, .38);
+}
+html.sys-glass .app-shell.liquid-ui .sidebar { background: rgba(255, 255, 255, .14) !important; }
+html.sys-glass[data-theme="dark"] .app-shell.liquid-ui {
+  background:
+    radial-gradient(55% 42% at 16% 8%, rgba(99, 102, 241, .18), transparent 70%),
+    radial-gradient(58% 46% at 72% 86%, rgba(13, 148, 136, .13), transparent 70%),
+    rgba(16, 17, 24, .42);
+}
+html.sys-glass[data-theme="dark"] .app-shell.liquid-ui .sidebar { background: rgba(18, 20, 28, .18) !important; }

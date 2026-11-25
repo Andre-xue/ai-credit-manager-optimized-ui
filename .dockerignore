@@ -1,0 +1,27 @@
+# 依赖与构建产物
+node_modules/
+dist/
+*.tsbuildinfo
+
+# 桌面端 Rust 产物（体积大，约 1GB）
+desktop/src-tauri/target/
+desktop/node_modules/
+
+# Git
+.git/
+.gitignore
+
+# 系统与环境
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# 交付安装包（二进制，不入镜像/仓库）
+*.dmg
+*.app/

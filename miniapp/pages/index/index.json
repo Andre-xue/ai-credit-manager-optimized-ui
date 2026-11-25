@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "AI 积分管家",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "hold-btn": "/components/hold-btn/hold-btn"
+  }
+}

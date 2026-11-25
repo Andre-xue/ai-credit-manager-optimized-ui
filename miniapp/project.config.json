@@ -1,0 +1,16 @@
+{
+  "description": "AI 积分管家 - 轻量查询与签到提醒（合规版：不自动化外部操作）",
+  "packOptions": { "ignore": [] },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.5.0",
+  "appid": "touristappid",
+  "projectname": "ai-credit-manager",
+  "condition": {}
+}

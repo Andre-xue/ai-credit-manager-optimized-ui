@@ -1,0 +1,561 @@
+/* ============================================================
+   AI 魔方 · 全平台外观主题系统 (A–H)
+   ------------------------------------------------------------
+   只作用于显示层：设计令牌、表面材质、响应式布局与动效。
+   不参与账户 / 额度 / 签到 / 用量 / 接口 / 存储等任何业务链路。
+
+   加载顺序：本文件由 main.tsx 在 styles / claude-ui / redesign /
+   liquid-global 之后导入，因此是最后一层，优先级最高。
+
+   实现要点：
+   1) <html data-ui-theme="X"> 由 uiThemes.ts 在首屏前写入，React 内
+      再按 settings.uiTheme 同步（Web / Docker / Tauri / Capacitor 共用）。
+   2) 采用「色板(--t-*) → 语义变量(--bg / --panel / ...)」两层映射，
+      避免与 redesign.css 的 :root[data-theme="dark"] 互相污染：
+      映射规则同时带 [data-theme="dark"] 变体，优先级 (0,3,0) 稳定胜出。
+   3) 对历史 CSS 中散落的硬编码白底 / 紫按钮做一次统一收敛。
+   ============================================================ */
+
+/* ---------- 1. 语义变量映射（两层结构，兼容明暗模式） ---------- */
+html[data-ui-theme],
+html[data-ui-theme][data-theme='dark'] {
+  --bg: var(--t-bg);
+  --panel: var(--t-panel);
+  --panel-2: var(--t-panel-2);
+  --panel-3: var(--t-panel-3);
+  --border: var(--t-border);
+  --border-strong: var(--t-border-strong);
+  --text: var(--t-text);
+  --text-2: var(--t-text-2);
+  --text-3: var(--t-text-3);
+  --primary: var(--t-primary);
+  --primary-2: var(--t-primary-2);
+  --primary-soft: var(--t-primary-soft);
+  --primary-hover: var(--t-primary-hover);
+  --on-primary: var(--t-on-primary);
+  --green: var(--t-green);
+  --green-soft: var(--t-green-soft);
+  --amber: var(--t-amber);
+  --amber-soft: var(--t-amber-soft);
+  --red: var(--t-red);
+  --red-soft: var(--t-red-soft);
+  --blue: var(--t-blue);
+  --blue-soft: var(--t-blue-soft);
+  --radius: var(--t-radius);
+  --radius-sm: var(--t-radius-sm);
+  --radius-lg: var(--t-radius-lg);
+  --shadow: var(--t-shadow);
+  --shadow-md: var(--t-shadow-md);
+  --shadow-lg: var(--t-shadow-lg);
+  --accent: var(--t-primary-2, var(--t-primary));
+  --theme-grad: var(--t-grad);
+  --theme-glow: var(--t-glow);
+  --theme-ring: var(--t-ring);
+}
+
+/* ---------- 2. 八套主题色板 · 浅色 / 常规分支 ---------- */
+
+/* A · 精准控制台：极简蓝、清晰边界、表格优先 */
+html[data-ui-theme='precision'] {
+  --t-bg:#f4f7fb; --t-panel:#ffffff; --t-panel-2:#f8fafc; --t-panel-3:#eef2f8;
+  --t-border:#e2e8f0; --t-border-strong:#cbd5e1;
+  --t-text:#172033; --t-text-2:#52627a; --t-text-3:#8a99ad;
+  --t-primary:#2563eb; --t-primary-2:#3b82f6; --t-primary-soft:#e8f0ff; --t-primary-hover:#1d4ed8;
+  --t-on-primary:#ffffff;
+  --t-green:#047857; --t-green-soft:#e7f7f0; --t-amber:#b45309; --t-amber-soft:#fff5e5;
+  --t-red:#c0261d; --t-red-soft:#fdeceb; --t-blue:#1d4ed8; --t-blue-soft:#e8f0ff;
+  --t-radius:10px; --t-radius-sm:7px; --t-radius-lg:14px;
+  --t-shadow:0 1px 2px rgba(23,32,51,.05),0 1px 3px rgba(23,32,51,.05);
+  --t-shadow-md:0 4px 14px -4px rgba(23,32,51,.12),0 2px 6px -2px rgba(23,32,51,.06);
+  --t-shadow-lg:0 16px 40px -14px rgba(23,32,51,.22);
+  --t-grad:linear-gradient(120deg,#2563eb,#3b82f6); --t-glow:rgba(37,99,235,.20); --t-ring:rgba(37,99,235,.28);
+}
+
+/* B · 暖白工作室：陶土暖色、大留白、沉静 */
+html[data-ui-theme='studio'] {
+  --t-bg:#f5f1ea; --t-panel:#fffdf9; --t-panel-2:#f7f2e9; --t-panel-3:#efe8dc;
+  --t-border:#e9dfd0; --t-border-strong:#d8c9b4;
+  --t-text:#352e29; --t-text-2:#75695d; --t-text-3:#a2968a;
+  --t-primary:#b85f3e; --t-primary-2:#d08a62; --t-primary-soft:#f8ebe2; --t-primary-hover:#9c4c30;
+  --t-on-primary:#ffffff;
+  --t-green:#4f6f43; --t-green-soft:#eef3e8; --t-amber:#a4691f; --t-amber-soft:#faf0dd;
+  --t-red:#a84536; --t-red-soft:#f9e9e5; --t-blue:#45658c; --t-blue-soft:#e9eff5;
+  --t-radius:18px; --t-radius-sm:12px; --t-radius-lg:26px;
+  --t-shadow:0 1px 2px rgba(80,62,44,.05),0 2px 8px rgba(80,62,44,.05);
+  --t-shadow-md:0 6px 20px -8px rgba(80,62,44,.16),0 2px 6px -2px rgba(80,62,44,.06);
+  --t-shadow-lg:0 20px 46px -16px rgba(80,62,44,.24);
+  --t-grad:linear-gradient(120deg,#b85f3e,#d08a62); --t-glow:rgba(184,95,62,.16); --t-ring:rgba(184,95,62,.24);
+}
+
+/* C · 暗夜指挥舱：固定深色、青绿数据、高密度 */
+html[data-ui-theme='command'] {
+  --t-bg:#080d14; --t-panel:#101823; --t-panel-2:#16202e; --t-panel-3:#1d2939;
+  --t-border:#22303f; --t-border-strong:#33455a;
+  --t-text:#e5f2ed; --t-text-2:#9ab0a8; --t-text-3:#6d837d;
+  --t-primary:#34d399; --t-primary-2:#22c3a6; --t-primary-soft:#0f2c25; --t-primary-hover:#5ce0b4;
+  --t-on-primary:#062b20;
+  --t-green:#34d399; --t-green-soft:#0f2c25; --t-amber:#fbbf24; --t-amber-soft:#2c230d;
+  --t-red:#f87171; --t-red-soft:#33171c; --t-blue:#60a5fa; --t-blue-soft:#12263f;
+  --t-radius:8px; --t-radius-sm:6px; --t-radius-lg:12px;
+  --t-shadow:0 1px 2px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.45);
+  --t-shadow-md:0 6px 20px -6px rgba(0,0,0,.6),0 2px 6px -2px rgba(0,0,0,.4);
+  --t-shadow-lg:0 20px 48px -14px rgba(0,0,0,.75);
+  --t-grad:linear-gradient(120deg,#0e9f74,#34d399); --t-glow:rgba(52,211,153,.18); --t-ring:rgba(52,211,153,.30);
+  color-scheme:dark;
+}
+
+/* D · 青屿轻卡片：自然青绿、大圆角、触控友好 */
+html[data-ui-theme='island'] {
+  --t-bg:#edf7f4; --t-panel:#ffffff; --t-panel-2:#f4fbf8; --t-panel-3:#e5f3ed;
+  --t-border:#d8ebe4; --t-border-strong:#bcdcd1;
+  --t-text:#153f3a; --t-text-2:#4f7a72; --t-text-3:#85aaa2;
+  --t-primary:#0f8f81; --t-primary-2:#37b9a6; --t-primary-soft:#e2f6f0; --t-primary-hover:#0b756a;
+  --t-on-primary:#ffffff;
+  --t-green:#0f8f6b; --t-green-soft:#e3f7ee; --t-amber:#b77b16; --t-amber-soft:#fff4dc;
+  --t-red:#c45548; --t-red-soft:#fcece9; --t-blue:#2a7f9e; --t-blue-soft:#e6f3f8;
+  --t-radius:22px; --t-radius-sm:14px; --t-radius-lg:30px;
+  --t-shadow:0 1px 2px rgba(15,63,58,.05),0 3px 10px rgba(15,63,58,.05);
+  --t-shadow-md:0 8px 24px -8px rgba(15,63,58,.16),0 2px 8px -2px rgba(15,63,58,.06);
+  --t-shadow-lg:0 22px 50px -16px rgba(15,63,58,.22);
+  --t-grad:linear-gradient(120deg,#0f8f81,#37b9a6); --t-glow:rgba(55,185,166,.20); --t-ring:rgba(15,143,129,.26);
+}
+
+/* E · 极光琉璃（默认）：深色画布、极光渐变、分层玻璃与纵深 */
+html[data-ui-theme='aurora'] {
+  --t-bg:#0d0c1b; --t-panel:#1b1932; --t-panel-2:#232041; --t-panel-3:#2c2850;
+  --t-border:#373259; --t-border-strong:#4a4473;
+  --t-text:#f2efff; --t-text-2:#bdb5dd; --t-text-3:#8d86b4;
+  --t-primary:#a996ff; --t-primary-2:#55d6be; --t-primary-soft:#2c2650; --t-primary-hover:#c1b2ff;
+  --t-on-primary:#14102b;
+  --t-green:#55d6be; --t-green-soft:#12302c; --t-amber:#f3c37b; --t-amber-soft:#33270f;
+  --t-red:#ff8e9e; --t-red-soft:#3a1826; --t-blue:#7db8ff; --t-blue-soft:#152a49;
+  --t-radius:20px; --t-radius-sm:13px; --t-radius-lg:28px;
+  --t-shadow:0 1px 2px rgba(0,0,0,.42),0 2px 10px rgba(0,0,0,.28);
+  --t-shadow-md:0 10px 30px -10px rgba(0,0,0,.6),0 2px 8px -2px rgba(0,0,0,.4);
+  --t-shadow-lg:0 26px 60px -18px rgba(0,0,0,.72);
+  --t-grad:linear-gradient(120deg,#7b6cf0,#a996ff 45%,#55d6be); --t-glow:rgba(157,140,255,.28); --t-ring:rgba(169,150,255,.36);
+  color-scheme:dark;
+}
+
+/* F · 极简流光：纯净浅色、精细描边、丝滑动效 */
+html[data-ui-theme='lumin'] {
+  --t-bg:#f7f9fc; --t-panel:#ffffff; --t-panel-2:#f9fbfe; --t-panel-3:#f0f4fa;
+  --t-border:#e4eaf3; --t-border-strong:#cfd9e8;
+  --t-text:#152033; --t-text-2:#52627a; --t-text-3:#94a1b5;
+  --t-primary:#0969da; --t-primary-2:#7c3aed; --t-primary-soft:#e8f1ff; --t-primary-hover:#0757b8;
+  --t-on-primary:#ffffff;
+  --t-green:#0a7f4f; --t-green-soft:#e7f7ef; --t-amber:#a86a08; --t-amber-soft:#fff5e2;
+  --t-red:#c62f38; --t-red-soft:#fdecee; --t-blue:#0969da; --t-blue-soft:#e8f1ff;
+  --t-radius:12px; --t-radius-sm:8px; --t-radius-lg:18px;
+  --t-shadow:0 1px 2px rgba(21,32,51,.04),0 1px 3px rgba(21,32,51,.03);
+  --t-shadow-md:0 4px 18px -6px rgba(21,32,51,.12),0 2px 6px -2px rgba(21,32,51,.04);
+  --t-shadow-lg:0 18px 44px -14px rgba(21,32,51,.18);
+  --t-grad:linear-gradient(120deg,#0969da,#5b8def 55%,#7c3aed); --t-glow:rgba(9,105,218,.16); --t-ring:rgba(9,105,218,.26);
+}
+
+/* G · 星舰 HUD：深空、精密刻度、青蓝数据 */
+html[data-ui-theme='hud'] {
+  --t-bg:#050d13; --t-panel:#0b1821; --t-panel-2:#10222d; --t-panel-3:#162d3a;
+  --t-border:#1d3a46; --t-border-strong:#2c5462;
+  --t-text:#d8fff7; --t-text-2:#8fc0bb; --t-text-3:#5f8e8b;
+  --t-primary:#64ffda; --t-primary-2:#38bdf8; --t-primary-soft:#0d2a2b; --t-primary-hover:#8dffe4;
+  --t-on-primary:#04231d;
+  --t-green:#64ffda; --t-green-soft:#0d2a26; --t-amber:#ffd166; --t-amber-soft:#2b240e;
+  --t-red:#ff7a8a; --t-red-soft:#33141c; --t-blue:#38bdf8; --t-blue-soft:#0b2438;
+  --t-radius:6px; --t-radius-sm:4px; --t-radius-lg:10px;
+  --t-shadow:0 1px 2px rgba(0,0,0,.55),0 0 0 1px rgba(100,255,218,.04);
+  --t-shadow-md:0 6px 22px -8px rgba(0,0,0,.7),0 0 0 1px rgba(100,255,218,.06);
+  --t-shadow-lg:0 22px 54px -16px rgba(0,0,0,.8);
+  --t-grad:linear-gradient(120deg,#0f7a76,#38bdf8 55%,#64ffda); --t-glow:rgba(100,255,218,.20); --t-ring:rgba(100,255,218,.34);
+  color-scheme:dark;
+}
+
+/* H · 数字杂志：纸感暖灰、编辑排版、内容叙事 */
+html[data-ui-theme='editorial'] {
+  --t-bg:#eee9df; --t-panel:#faf7f0; --t-panel-2:#f3eee4; --t-panel-3:#e8e0d2;
+  --t-border:#ded6c7; --t-border-strong:#c9bda8;
+  --t-text:#27231f; --t-text-2:#6d6357; --t-text-3:#9c9082;
+  --t-primary:#c54c31; --t-primary-2:#8c5a3c; --t-primary-soft:#f7e8e1; --t-primary-hover:#a63c25;
+  --t-on-primary:#ffffff;
+  --t-green:#4c6b47; --t-green-soft:#ecf2e8; --t-amber:#a4701c; --t-amber-soft:#faf0dc;
+  --t-red:#a63c2f; --t-red-soft:#f8e7e3; --t-blue:#3d5f80; --t-blue-soft:#e8eef3;
+  --t-radius:4px; --t-radius-sm:3px; --t-radius-lg:8px;
+  --t-shadow:0 1px 2px rgba(60,50,38,.06),0 1px 3px rgba(60,50,38,.05);
+  --t-shadow-md:0 4px 14px -6px rgba(60,50,38,.16),0 2px 5px -2px rgba(60,50,38,.08);
+  --t-shadow-lg:0 16px 38px -14px rgba(60,50,38,.26);
+  --t-grad:linear-gradient(120deg,#c54c31,#8c5a3c); --t-glow:rgba(197,76,49,.14); --t-ring:rgba(197,76,49,.24);
+}
+
+/* ---------- 3. 八套主题色板 · 深色模式分支 ---------- */
+/* 浅色系主题在用户选择「深色 / 跟随系统」时切换到同色系深版；
+   固定深色主题（C/E/G）保持自身画布，不受明暗模式影响。 */
+
+html[data-ui-theme='precision'][data-theme='dark'] {
+  --t-bg:#0b1220; --t-panel:#131d30; --t-panel-2:#19263c; --t-panel-3:#22314a;
+  --t-border:#263751; --t-border-strong:#3a4f70;
+  --t-text:#e8f0ff; --t-text-2:#a2b4d0; --t-text-3:#7186a6;
+  --t-primary:#60a5fa; --t-primary-2:#3b82f6; --t-primary-soft:#172b49; --t-primary-hover:#8dc2ff;
+  --t-green:#34d399; --t-green-soft:#0d2b21; --t-amber:#fbbf24; --t-amber-soft:#2e230a;
+  --t-red:#f87171; --t-red-soft:#33151a; --t-blue:#60a5fa; --t-blue-soft:#12263f;
+  --t-grad:linear-gradient(120deg,#1d4ed8,#60a5fa); --t-glow:rgba(96,165,250,.18); --t-ring:rgba(96,165,250,.30);
+  color-scheme:dark;
+}
+html[data-ui-theme='studio'][data-theme='dark'] {
+  --t-bg:#1a1613; --t-panel:#241e19; --t-panel-2:#2c251f; --t-panel-3:#372e26;
+  --t-border:#3b3128; --t-border-strong:#524438;
+  --t-text:#f5ece2; --t-text-2:#c4b3a2; --t-text-3:#918271;
+  --t-primary:#e09a72; --t-primary-2:#c97b52; --t-primary-soft:#3a2820; --t-primary-hover:#f2b492;
+  --t-green:#9dc48c; --t-green-soft:#202c1c; --t-amber:#e8bd70; --t-amber-soft:#332812;
+  --t-red:#f08d7e; --t-red-soft:#3a1e1a; --t-blue:#8fb2d8; --t-blue-soft:#1c2a3a;
+  --t-grad:linear-gradient(120deg,#a85435,#e09a72); --t-glow:rgba(224,154,114,.16); --t-ring:rgba(224,154,114,.26);
+  color-scheme:dark;
+}
+html[data-ui-theme='island'][data-theme='dark'] {
+  --t-bg:#081a17; --t-panel:#102720; --t-panel-2:#163128; --t-panel-3:#1d3d32;
+  --t-border:#24473c; --t-border-strong:#356052;
+  --t-text:#e4f7f0; --t-text-2:#a1c9bd; --t-text-3:#6f9b90;
+  --t-primary:#4fd1b5; --t-primary-2:#2fb79c; --t-primary-soft:#12392f; --t-primary-hover:#7ce3cb;
+  --t-green:#4fd1b5; --t-green-soft:#12392f; --t-amber:#f0c069; --t-amber-soft:#32260f;
+  --t-red:#f58e82; --t-red-soft:#381b1a; --t-blue:#6cc0dd; --t-blue-soft:#122e3a;
+  --t-grad:linear-gradient(120deg,#0f7a6c,#4fd1b5); --t-glow:rgba(79,209,181,.18); --t-ring:rgba(79,209,181,.30);
+  color-scheme:dark;
+}
+html[data-ui-theme='lumin'][data-theme='dark'] {
+  --t-bg:#0a0e16; --t-panel:#111827; --t-panel-2:#182133; --t-panel-3:#212c42;
+  --t-border:#26324a; --t-border-strong:#3a4a68;
+  --t-text:#eaf0fb; --t-text-2:#a6b4cc; --t-text-3:#7384a0;
+  --t-primary:#4d9dff; --t-primary-2:#a78bfa; --t-primary-soft:#172a49; --t-primary-hover:#79b7ff;
+  --t-green:#3ddc97; --t-green-soft:#0e2c21; --t-amber:#f5c26b; --t-amber-soft:#30240e;
+  --t-red:#ff8492; --t-red-soft:#361820; --t-blue:#4d9dff; --t-blue-soft:#172a49;
+  --t-grad:linear-gradient(120deg,#0969da,#4d9dff 55%,#a78bfa); --t-glow:rgba(77,157,255,.18); --t-ring:rgba(77,157,255,.30);
+  color-scheme:dark;
+}
+html[data-ui-theme='editorial'][data-theme='dark'] {
+  --t-bg:#171411; --t-panel:#211c17; --t-panel-2:#2a231c; --t-panel-3:#352c23;
+  --t-border:#3a3026; --t-border-strong:#504234;
+  --t-text:#f3ece2; --t-text-2:#c2b3a1; --t-text-3:#8e806f;
+  --t-primary:#e8795f; --t-primary-2:#c07a54; --t-primary-soft:#3b241d; --t-primary-hover:#f29a83;
+  --t-green:#9ec48f; --t-green-soft:#212c1d; --t-amber:#e8bd70; --t-amber-soft:#32280f;
+  --t-red:#f08d7e; --t-red-soft:#3a1f1b; --t-blue:#8fb2d8; --t-blue-soft:#1c2a3a;
+  --t-grad:linear-gradient(120deg,#b6452c,#e8795f); --t-glow:rgba(232,121,95,.16); --t-ring:rgba(232,121,95,.26);
+  color-scheme:dark;
+}
+/* 固定深色：无论 data-theme 取值都用自身画布，防止被 redesign 通用深色覆盖 */
+html[data-ui-theme='command'][data-theme='dark'],
+html[data-ui-theme='aurora'][data-theme='dark'],
+html[data-ui-theme='hud'][data-theme='dark'] { color-scheme:dark; }
+
+/* ---------- 4. 收敛历史 CSS 的硬编码颜色 ---------- */
+/* 这些选择器带 html[data-ui-theme] 前缀，优先级高于原规则；
+   对原本带 !important 的规则同样使用 !important 以确保生效。 */
+
+html[data-ui-theme] body,
+html[data-ui-theme]:has(.app-shell.liquid-ui) body,
+html[data-ui-theme][data-theme='dark']:has(.app-shell.liquid-ui) body {
+  background:var(--bg) !important; color:var(--text) !important;
+}
+/* E 主题沿用系统级液态玻璃时，防止旧玻璃层把文字层级变量改回通用值 */
+html[data-ui-theme='aurora'] .app-shell.liquid-ui,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui {
+  --text-2:var(--t-text-2) !important; --text-3:var(--t-text-3) !important;
+}
+html[data-ui-theme='aurora'] .claude-ui.phone-shell::before { display:block !important; }
+html[data-ui-theme] .app-shell,
+html[data-ui-theme] .claude-ui.app-shell,
+html[data-ui-theme] .app-shell.liquid-ui,
+html[data-ui-theme] .claude-ui.phone-shell,
+html[data-ui-theme] .phone-shell { background:var(--bg) !important; color:var(--text) !important; }
+
+html[data-ui-theme] .sidebar,
+html[data-ui-theme] .claude-ui .sidebar,
+html[data-ui-theme] .phone-shell .sidebar {
+  background:var(--panel-2) !important; border-right-color:var(--border) !important; color:var(--text) !important;
+}
+html[data-ui-theme] .topbar,
+html[data-ui-theme] .claude-ui .topbar {
+  background:var(--panel) !important; border-bottom-color:var(--border) !important; color:var(--text) !important;
+}
+html[data-ui-theme] .brand { border-bottom-color:var(--border) !important; }
+html[data-ui-theme] .brand-name { color:var(--text) !important; }
+html[data-ui-theme] .brand-sub { color:var(--text-3) !important; }
+
+html[data-ui-theme] .panel,
+html[data-ui-theme] .card,
+html[data-ui-theme] .stat-card,
+html[data-ui-theme] .set-card,
+html[data-ui-theme] .set-section,
+html[data-ui-theme] .gen-panel,
+html[data-ui-theme] .sd-block,
+html[data-ui-theme] .bento-tile,
+html[data-ui-theme] .account-card,
+html[data-ui-theme] .agent-card,
+html[data-ui-theme] .ai-quick-card,
+html[data-ui-theme] .onboarding-card,
+html[data-ui-theme] .modal,
+html[data-ui-theme] .set-modal,
+html[data-ui-theme] .cmdk-panel,
+html[data-ui-theme] .ai-model-menu,
+html[data-ui-theme] .toast {
+  background:var(--panel) !important; color:var(--text) !important; border-color:var(--border) !important;
+}
+html[data-ui-theme] .modal-foot { background:var(--panel-2) !important; }
+html[data-ui-theme] .bento-cta,
+html[data-ui-theme] .btn.hero-primary,
+html[data-ui-theme] .topbar-pill,
+html[data-ui-theme] .desktop-sidebar-restore,
+html[data-ui-theme] .catalog-news-bar button,
+html[data-ui-theme] .ac-logo-img,
+html[data-ui-theme] .logo-img,
+html[data-ui-theme] .p-logo-img {
+  background:var(--panel) !important; color:var(--text) !important; border-color:var(--border) !important;
+}
+html[data-ui-theme] .btn:not(.primary),
+html[data-ui-theme] .topbar-actions .btn:not(.primary) {
+  background:var(--panel) !important; color:var(--text) !important; border-color:var(--border-strong) !important;
+}
+html[data-ui-theme] .btn.primary,
+html[data-ui-theme] .claude-ui .topbar-actions .btn.primary {
+  background:var(--theme-grad) !important; color:var(--on-primary) !important; border-color:transparent !important;
+}
+html[data-ui-theme] .btn.primary:hover { filter:brightness(1.08); }
+html[data-ui-theme] .input,
+html[data-ui-theme] .select,
+html[data-ui-theme] input.input,
+html[data-ui-theme] select.select,
+html[data-ui-theme] textarea.input {
+  background:var(--panel) !important; color:var(--text) !important; border-color:var(--border-strong) !important;
+}
+html[data-ui-theme] ::placeholder { color:var(--text-3) !important; }
+html[data-ui-theme] .seg-control { background:var(--panel-3) !important; border-color:var(--border) !important; }
+html[data-ui-theme] .seg-btn { color:var(--text-2) !important; }
+html[data-ui-theme] .seg-btn.active,
+html[data-ui-theme] .nav-item.active .nav-item-icon {
+  background:var(--theme-grad) !important; color:var(--on-primary) !important;
+}
+html[data-ui-theme] .nav-item.active { background:var(--primary-soft) !important; color:var(--primary) !important; }
+html[data-ui-theme] .nav-item:hover { background:var(--panel-3) !important; }
+html[data-ui-theme] .nav-item-icon { background:var(--panel-3) !important; color:var(--text-2) !important; }
+html[data-ui-theme] .ai-bubble { color:var(--text) !important; }
+html[data-ui-theme] .ai-msg.user .ai-bubble { background:var(--primary-soft) !important; color:var(--text) !important; }
+html[data-ui-theme] .ai-compose-box { background:var(--panel) !important; border-color:var(--border-strong) !important; }
+html[data-ui-theme] .ai-textarea { color:var(--text) !important; }
+html[data-ui-theme] .ai-hint,
+html[data-ui-theme] .muted,
+html[data-ui-theme] .hint { color:var(--text-3) !important; }
+html[data-ui-theme] .topbar-eyebrow { color:var(--primary) !important; }
+html[data-ui-theme] ::selection { background:var(--primary-soft); color:var(--text); }
+html[data-ui-theme] .progress { background:var(--panel-3) !important; }
+html[data-ui-theme] .divider,
+html[data-ui-theme] hr { border-color:var(--border) !important; }
+
+/* 通用圆角与阴影跟随主题 */
+html[data-ui-theme] .card,
+html[data-ui-theme] .panel,
+html[data-ui-theme] .set-card,
+html[data-ui-theme] .bento-tile,
+html[data-ui-theme] .modal { border-radius:var(--radius) !important; box-shadow:var(--shadow) !important; }
+
+/* ---------- 5. 设置页：八套主题选择画廊 ---------- */
+.theme-setting-block {
+  padding:18px 20px 20px; border-top:1px solid var(--border);
+}
+.theme-setting-heading {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px;
+}
+.theme-setting-heading strong { display:block; font-size:14px; font-weight:700; color:var(--text); }
+.theme-setting-heading p { margin:6px 0 0; font-size:12.5px; line-height:1.6; color:var(--text-2); }
+.theme-current-badge {
+  flex:none; padding:5px 11px; border-radius:999px; font-size:11.5px; font-weight:700;
+  background:var(--primary-soft); color:var(--primary); border:1px solid var(--border);
+  white-space:nowrap;
+}
+.theme-gallery {
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px;
+}
+.theme-choice {
+  display:flex; flex-direction:column; gap:10px; padding:10px; text-align:left;
+  border:1px solid var(--border); border-radius:var(--radius); background:var(--panel);
+  color:var(--text); font:inherit; cursor:pointer; position:relative;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.theme-choice:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--border-strong); }
+.theme-choice:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
+.theme-choice.active { border-color:var(--primary); box-shadow:0 0 0 1px var(--primary),var(--shadow-md); background:var(--primary-soft); }
+.theme-choice:active { transform:translateY(0) scale(.985); }
+
+/* 缩略图：模拟「侧栏 + 主内容 + 光斑」的应用骨架 */
+.theme-preview {
+  position:relative; display:flex; gap:6px; height:76px; padding:8px; overflow:hidden;
+  border-radius:calc(var(--radius) - 4px); border:1px solid rgba(127,127,127,.16);
+  background:var(--pv-bg); isolation:isolate;
+}
+.theme-preview-side {
+  flex:0 0 22%; border-radius:4px; background:var(--pv-side);
+  box-shadow:inset -1px 0 0 rgba(127,127,127,.12);
+}
+.theme-preview-main { flex:1; display:flex; flex-direction:column; gap:5px; padding-top:2px; }
+.theme-preview-main i {
+  display:block; height:10px; border-radius:3px; background:var(--pv-panel);
+  box-shadow:0 1px 2px rgba(0,0,0,.10);
+}
+.theme-preview-main i:nth-child(1) { height:16px; width:62%; background:var(--pv-primary); }
+.theme-preview-main i:nth-child(2) { width:88%; }
+.theme-preview-main i:nth-child(3) { width:70%; }
+.theme-preview-glow {
+  position:absolute; right:-18px; bottom:-24px; width:74px; height:74px; border-radius:50%;
+  background:var(--pv-glow); filter:blur(16px); z-index:-1;
+}
+.theme-choice-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.theme-choice-title { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.theme-choice-title strong { font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.theme-selected-mark {
+  flex:none; display:none; place-items:center; width:17px; height:17px; border-radius:50%;
+  background:var(--primary); color:var(--on-primary);
+}
+.theme-choice.active .theme-selected-mark { display:grid; }
+.theme-choice-desc { font-size:11px; color:var(--text-2); line-height:1.45; }
+.theme-choice-interaction { font-size:10.5px; color:var(--text-3); line-height:1.4; }
+.theme-gallery-note {
+  margin-top:14px; padding:10px 12px; border-radius:var(--radius-sm);
+  background:var(--panel-2); border:1px solid var(--border);
+  font-size:11.5px; line-height:1.6; color:var(--text-3);
+}
+
+/* 每张缩略图使用对应主题的真实色板 */
+.theme-preview-precision { --pv-bg:#f4f7fb; --pv-side:#e2e8f0; --pv-panel:#ffffff; --pv-primary:#2563eb; --pv-glow:rgba(37,99,235,.35); }
+.theme-preview-studio    { --pv-bg:#f5f1ea; --pv-side:#e9dfd0; --pv-panel:#fffdf9; --pv-primary:#b85f3e; --pv-glow:rgba(208,138,98,.35); }
+.theme-preview-command   { --pv-bg:#080d14; --pv-side:#16202e; --pv-panel:#101823; --pv-primary:#34d399; --pv-glow:rgba(52,211,153,.4); }
+.theme-preview-island    { --pv-bg:#edf7f4; --pv-side:#d8ebe4; --pv-panel:#ffffff; --pv-primary:#0f8f81; --pv-glow:rgba(55,185,166,.4); }
+.theme-preview-aurora    { --pv-bg:#0d0c1b; --pv-side:#232041; --pv-panel:#1b1932; --pv-primary:linear-gradient(90deg,#a996ff,#55d6be); --pv-glow:rgba(157,140,255,.55); }
+.theme-preview-lumin     { --pv-bg:#f7f9fc; --pv-side:#e4eaf3; --pv-panel:#ffffff; --pv-primary:linear-gradient(90deg,#0969da,#7c3aed); --pv-glow:rgba(124,58,237,.3); }
+.theme-preview-hud       { --pv-bg:#050d13; --pv-side:#10222d; --pv-panel:#0b1821; --pv-primary:#64ffda; --pv-glow:rgba(56,189,248,.45); }
+.theme-preview-editorial { --pv-bg:#eee9df; --pv-side:#ded6c7; --pv-panel:#faf7f0; --pv-primary:#c54c31; --pv-glow:rgba(197,76,49,.3); }
+
+@media (max-width:1180px) { .theme-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:560px) {
+  .theme-setting-block { padding:16px 14px 18px; }
+  .theme-setting-heading { flex-direction:column; gap:8px; }
+  .theme-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .theme-preview { height:62px; }
+  .theme-choice-interaction { display:none; }
+}
+
+/* ---------- 6. 各主题的专属材质与交互层次 ---------- */
+
+/* A · 精准控制台：表格线与清晰焦点 */
+html[data-ui-theme='precision'] .app-shell { letter-spacing:-.005em; }
+html[data-ui-theme='precision'] .panel,
+html[data-ui-theme='precision'] .card { border-width:1px !important; }
+html[data-ui-theme='precision'] .stat-card strong,
+html[data-ui-theme='precision'] .bento-tile strong { font-variant-numeric:tabular-nums; }
+
+/* B · 暖白工作室：舒缓留白、标题衬线、柔和过渡 */
+html[data-ui-theme='studio'] .app-shell { font-family:"Iowan Old Style","Songti SC","Noto Serif CJK SC",Georgia,serif; }
+html[data-ui-theme='studio'] .bento-greeting h2,
+html[data-ui-theme='studio'] .topbar-heading h1 { font-weight:600; letter-spacing:-.02em; }
+html[data-ui-theme='studio'] .card,
+html[data-ui-theme='studio'] .panel { padding-left:20px !important; padding-right:20px !important; }
+html[data-ui-theme='studio'] .theme-choice,
+html[data-ui-theme='studio'] .bento-tile { transition-duration:.24s !important; }
+
+/* C · 暗夜指挥舱：紧凑密度、数据等宽、细网格 */
+html[data-ui-theme='command'] .app-shell { font-variant-numeric:tabular-nums; }
+html[data-ui-theme='command'] .app-shell::before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:linear-gradient(rgba(52,211,153,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(52,211,153,.028) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+html[data-ui-theme='command'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='command'] .stat-card strong { letter-spacing:-.02em; }
+
+/* D · 青屿轻卡片：弹性按压、大触控区域 */
+html[data-ui-theme='island'] .btn,
+html[data-ui-theme='island'] .nav-item { min-height:40px; }
+html[data-ui-theme='island'] .bento-tile:active,
+html[data-ui-theme='island'] .btn:active { transform:scale(.975); }
+html[data-ui-theme='island'] .bento-tile { transition:transform .2s cubic-bezier(.2,.9,.3,1.3),box-shadow .2s ease !important; }
+
+/* E · 极光琉璃：极光光晕、分层玻璃、流动光泽 */
+html[data-ui-theme='aurora'] .app-shell { position:relative; }
+html[data-ui-theme='aurora'] .app-shell::before {
+  content:""; position:fixed; inset:-20% -10% auto -10%; height:70vh; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(42% 55% at 18% 22%,rgba(157,140,255,.30),transparent 70%),
+    radial-gradient(38% 48% at 78% 18%,rgba(85,214,190,.22),transparent 72%),
+    radial-gradient(46% 50% at 52% 78%,rgba(123,108,240,.16),transparent 74%);
+  filter:blur(28px); animation:auroraDrift 18s ease-in-out infinite alternate;
+}
+html[data-ui-theme='aurora'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='aurora'] .panel,
+html[data-ui-theme='aurora'] .card,
+html[data-ui-theme='aurora'] .set-card,
+html[data-ui-theme='aurora'] .bento-tile {
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.012)) , var(--panel) !important;
+  border-color:rgba(169,150,255,.20) !important;
+  backdrop-filter:blur(16px) saturate(1.3); -webkit-backdrop-filter:blur(16px) saturate(1.3);
+}
+html[data-ui-theme='aurora'] .nav-item.active {
+  box-shadow:inset 0 0 0 1px rgba(169,150,255,.36),0 4px 18px -8px rgba(169,150,255,.5) !important;
+}
+html[data-ui-theme='aurora'] .progress-bar { box-shadow:0 0 12px var(--theme-glow); }
+@keyframes auroraDrift {
+  from { transform:translate3d(-2%,-1%,0) scale(1); opacity:.85; }
+  to   { transform:translate3d(3%,2%,0) scale(1.12); opacity:1; }
+}
+
+/* F · 极简流光：磁性悬浮、共享过渡、细描边高光 */
+html[data-ui-theme='lumin'] .btn,
+html[data-ui-theme='lumin'] .nav-item,
+html[data-ui-theme='lumin'] .card { transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease,border-color .2s ease !important; }
+html[data-ui-theme='lumin'] .card:hover,
+html[data-ui-theme='lumin'] .panel:hover { border-color:var(--primary) !important; box-shadow:0 8px 28px -12px var(--theme-glow) !important; }
+html[data-ui-theme='lumin'] .btn.primary { background-size:160% 160% !important; animation:luminShift 8s ease infinite; }
+@keyframes luminShift { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+
+/* G · 星舰 HUD：刻度网格、扫描光带、指令面板描边 */
+html[data-ui-theme='hud'] .app-shell { font-family:"SF Mono","JetBrains Mono","Menlo",ui-monospace,monospace; }
+html[data-ui-theme='hud'] .app-shell::before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:linear-gradient(rgba(100,255,218,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(100,255,218,.045) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+html[data-ui-theme='hud'] .app-shell::after {
+  content:""; position:fixed; left:0; right:0; top:-10%; height:120px; pointer-events:none; z-index:0;
+  background:linear-gradient(180deg,transparent,rgba(100,255,218,.055),transparent);
+  animation:hudScan 9s linear infinite;
+}
+html[data-ui-theme='hud'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='hud'] .panel,
+html[data-ui-theme='hud'] .card,
+html[data-ui-theme='hud'] .bento-tile { border-color:rgba(100,255,218,.18) !important; box-shadow:inset 0 0 0 1px rgba(100,255,218,.05),var(--shadow) !important; }
+html[data-ui-theme='hud'] .stat-card strong { text-shadow:0 0 18px rgba(100,255,218,.35); }
+@keyframes hudScan { from { transform:translateY(0); } to { transform:translateY(120vh); } }
+
+/* H · 数字杂志：纸感纹理、章节分隔、编辑式标题 */
+html[data-ui-theme='editorial'] .app-shell { font-family:Georgia,"Songti SC","Noto Serif CJK SC",serif; }
+html[data-ui-theme='editorial'] .app-shell::before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:radial-gradient(rgba(120,100,80,.10) .6px,transparent .6px);
+  background-size:5px 5px;
+}
+html[data-ui-theme='editorial'] .app-shell > * { position:relative; z-index:1; }
+html[data-ui-theme='editorial'] .bento-greeting h2,
+html[data-ui-theme='editorial'] .topbar-heading h1 { font-weight:600; letter-spacing:-.025em; }
+html[data-ui-theme='editorial'] .set-section + .set-section,
+html[data-ui-theme='editorial'] .card + .card { border-top:2px solid var(--text) !important; }
+html[data-ui-theme='editorial'] .btn.primary { border-radius:2px !important; }
+
+/* ---------- 7. 动效降级：尊重「减少动态效果」与系统偏好 ---------- */
+html[data-ui-theme] .app-shell.no-motion *,
+html[data-ui-theme] .app-shell.no-motion *::before,
+html[data-ui-theme] .app-shell.no-motion *::after,
+html[data-ui-theme] .app-shell.no-motion {
+  animation:none !important; transition-duration:.01ms !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+html[data-ui-theme='aurora'] .app-shell.no-motion .panel,
+html[data-ui-theme='aurora'] .app-shell.no-motion .card { background:var(--panel) !important; }
+@media (prefers-reduced-motion:reduce) {
+  html[data-ui-theme] .app-shell *,
+  html[data-ui-theme] .app-shell *::before,
+  html[data-ui-theme] .app-shell *::after { animation:none !important; transition-duration:.01ms !important; }
+}

@@ -1,0 +1,6 @@
+<view class="hold-btn {{phase==='done' ? 'done' : ''}} {{phase==='holding' ? 'holding' : ''}}" style="width:{{size}}rpx;height:{{size}}rpx"
+  bindtouchstart="onStart" bindtouchend="onEnd" bindtouchcancel="onEnd" catchtap="onNoop">
+  <canvas type="2d" id="ring" class="hold-ring" style="width:{{size}}rpx;height:{{size}}rpx"></canvas>
+  <view class="hold-icon">{{phase==='done' ? '✓' : '✕'}}</view>
+  <view wx:if="{{phase==='done'}}" class="hold-label">已删除</view>
+</view>

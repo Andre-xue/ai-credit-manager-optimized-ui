@@ -1,0 +1,18 @@
+<view class="container ui-{{uiTheme}}">
+  <view class="banner">🎁 福利领取均在官方页面由本人操作，本应用仅做提醒与记录，不模拟登录、不自动领取。</view>
+
+  <view class="card" wx:if="{{list.length === 0}}">
+    <view class="empty">暂无已记录的福利标记</view>
+    <view class="hint" style="text-align:center;margin-top:12rpx">在桌面客户端或网页版标记福利后即可在此查看</view>
+  </view>
+
+  <view class="card" wx:for="{{list}}" wx:key="id">
+    <view class="row between setting-row">
+      <view>
+        <view style="font-size:28rpx">{{item.label}}</view>
+        <view class="hint" style="margin-top:6rpx">{{item.date}}</view>
+      </view>
+      <view class="tag">已记录</view>
+    </view>
+  </view>
+</view>

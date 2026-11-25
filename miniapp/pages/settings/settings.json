@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "设置",
+  "usingComponents": {
+    "hold-btn": "/components/hold-btn/hold-btn"
+  }
+}

@@ -1,0 +1,101 @@
+/* ============================================================
+   全局高级动效层（7 种，来自 UI motion 理念轻量适配）
+   设计原则：
+   1. 全部包在 .motion-ui 下，与设置页「界面动效」开关联动；
+   2. 只动 transform / opacity / width，走 GPU 合成，低配无压；
+   3. 尊重系统「减少动态效果」；
+   4. 手机端（.phone-shell）自动降级：时长更短、关闭高开销效果。
+   ============================================================ */
+
+/* ---------- 04 Tabs → panels：分类切换方向感淡入 ---------- */
+@keyframes me-panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.motion-ui .me-panel-in { animation: me-panel-in .26s cubic-bezier(.22, 1, .36, 1) both; }
+
+/* ---------- 05 Chart morph：进度条平滑形变 + 数字滚动 ---------- */
+/* 进度条填充已有 width transition，这里强化丝滑曲线 */
+.motion-ui .progress > div { transition: width .55s cubic-bezier(.22, 1, .36, 1); }
+/* 数字滚动：容器视角，数字切换时轻微上滑淡入 */
+@keyframes me-num-roll {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.motion-ui .me-num { display: inline-block; animation: me-num-roll .35s cubic-bezier(.22, 1, .36, 1); }
+
+/* ---------- 06 Dashboard zoom：KPI 卡片 hover 轻微放大 ---------- */
+.motion-ui .stat-card { transition: transform .24s cubic-bezier(.22, 1, .36, 1), box-shadow .24s ease; }
+.motion-ui .stat-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .10);
+}
+
+/* ---------- 14 Glass focus：看板账户卡聚焦，其余淡化 ---------- */
+/* 父容器 hover 时，所有卡片降透明度；被 hover 的那张恢复并轻微抬起 */
+.motion-ui .account-grid:hover .account-card { opacity: .55; transition: opacity .24s ease, transform .24s ease; }
+.motion-ui .account-grid .account-card:hover { opacity: 1; transform: translateY(-2px); z-index: 2; }
+.motion-ui .account-card { transition: opacity .24s ease, transform .24s ease, border-color .2s ease, box-shadow .2s ease; }
+
+/* ---------- 07 Spring stack：空状态弹性依次入场 ---------- */
+@keyframes me-spring-stack {
+  0%   { opacity: 0; transform: translateY(18px) scale(.9); }
+  60%  { opacity: 1; transform: translateY(-4px) scale(1.03); }
+  100% { opacity: 1; transform: none; }
+}
+.motion-ui .me-stack > * { animation: me-spring-stack .5s cubic-bezier(.22, 1, .36, 1) both; }
+.motion-ui .me-stack > *:nth-child(1) { animation-delay: .02s; }
+.motion-ui .me-stack > *:nth-child(2) { animation-delay: .10s; }
+.motion-ui .me-stack > *:nth-child(3) { animation-delay: .18s; }
+.motion-ui .me-stack > *:nth-child(4) { animation-delay: .26s; }
+
+/* ---------- 11 Text → layout：文案分层入场（空状态/引导） ---------- */
+@keyframes me-text-layer {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+.motion-ui .me-text-layer { animation: me-text-layer .45s cubic-bezier(.22, 1, .36, 1) both; }
+
+/* ---------- 骨架屏扫光：加载占位 shimmer ---------- */
+@keyframes me-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.motion-ui .me-skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--panel-2) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: me-shimmer 1.4s linear infinite;
+  border-radius: 6px;
+}
+.me-skeleton-stack { padding: 4px 0; }
+
+/* ============================================================
+   手机端降级：时长缩短、关闭高开销的 blur / 缩放 / 其余淡化
+   ============================================================ */
+@media (max-width: 680px), (pointer: coarse) {
+  .motion-ui.phone-shell .me-panel-in,
+  .motion-ui.phone-shell .me-num { animation-duration: .18s; }
+  .motion-ui.phone-shell .me-stack > * { animation: me-panel-in .2s ease both; }
+  .motion-ui.phone-shell .me-text-layer { animation: me-panel-in .2s ease both; }
+  .motion-ui.phone-shell .stat-card:hover { transform: none; }
+  .motion-ui.phone-shell .account-grid:hover .account-card { opacity: 1; }
+  .motion-ui.phone-shell .account-card:hover { transform: none; }
+  .motion-ui.phone-shell .me-skeleton { animation-duration: 1.8s; }
+}
+
+/* ============================================================
+   系统「减少动态效果」：全部失效（全平台通用可访问性）
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .motion-ui .me-panel-in,
+  .motion-ui .me-num,
+  .motion-ui .me-stack > *,
+  .motion-ui .me-text-layer,
+  .motion-ui .me-skeleton { animation: none !important; }
+  .motion-ui .stat-card,
+  .motion-ui .account-card,
+  .motion-ui .progress > div { transition: none !important; }
+  .motion-ui .stat-card:hover,
+  .motion-ui .account-card:hover,
+  .motion-ui .account-grid:hover .account-card { transform: none !important; opacity: 1 !important; }
+}

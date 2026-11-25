@@ -1,0 +1,21 @@
+services:
+  ai-credit-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-credit-manager:latest
+    container_name: ai-credit-manager
+    restart: unless-stopped
+    ports:
+      # 宿主机 8080 常被其他程序占用，改用 8081（容器内仍为 80）
+      - "8081:80"
+    environment:
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.cockpit-labs.description=AI 积分管家 Web 版"

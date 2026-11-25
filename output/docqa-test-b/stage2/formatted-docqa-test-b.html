@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="docx-page-size" content="A4">
+<title>文档问答功能测试话术脚本</title>
+<style>
+:root {
+  --typography-fontFamily-heading: "Microsoft YaHei", "微软雅黑", sans-serif;
+  --typography-fontFamily-body: "SimSun", "宋体", serif;
+  --typography-fontSize-h1: 18pt;
+  --typography-fontSize-h2: 14pt;
+  --typography-fontSize-h3: 12.5pt;
+  --typography-fontSize-body: 12pt;
+  --typography-lineHeight-body: 1.7;
+  --typography-fontWeight-bold: 700;
+  --fs-h1: var(--typography-fontSize-h1);
+  --fs-h2: var(--typography-fontSize-h2);
+  --fs-h3: var(--typography-fontSize-h3);
+  --fs-body: var(--typography-fontSize-body);
+  --ff-heading: var(--typography-fontFamily-heading);
+  --ff-body: var(--typography-fontFamily-body);
+  --lh-body: var(--typography-lineHeight-body);
+  --fw-bold: var(--typography-fontWeight-bold);
+  --color-primary: #1565C0;
+  --color-text: #212121;
+  --color-muted: #616161;
+  --color-border: #E0E0E0;
+  --color-callout-bg: #EEF4FB;
+  --fs-cover-title: 28pt;
+  --spacing-paragraph: 0.6em;
+  --spacing-section: 1.6em;
+  --page-content-width: 15.6cm;
+}
+@page { @bottom-center { content: counter(page); } }
+@page cover { @bottom-center { content: none; } }
+section[role="cover"] { page: cover; }
+body {
+  max-width: var(--page-content-width);
+  margin-left: auto; margin-right: auto;
+  font-family: var(--ff-body); font-size: var(--fs-body);
+  line-height: var(--lh-body); color: var(--color-text);
+}
+p { text-indent: 2em; margin-bottom: var(--spacing-paragraph); text-align: justify; }
+h1, h2, h3 { font-family: var(--ff-heading); color: var(--color-primary); font-weight: var(--fw-bold); }
+h1 { font-size: var(--fs-h1); margin-top: var(--spacing-section); margin-bottom: var(--spacing-paragraph); }
+h2 { font-size: var(--fs-h2); margin-top: 1.4em; margin-bottom: 0.5em; }
+h3 { font-size: var(--fs-h3); margin-top: 1em; margin-bottom: 0.4em; }
+.cover-title { text-align: center; font-family: var(--ff-heading); font-size: var(--fs-cover-title); font-weight: var(--fw-bold); color: var(--color-primary); margin-top: 5em; text-indent: 0; }
+.cover-sub { text-align: center; font-size: var(--fs-h2); color: var(--color-muted); text-indent: 0; margin-top: 1em; }
+.cover-meta { text-align: center; font-size: var(--fs-body); color: var(--color-muted); text-indent: 0; margin-top: 4em; }
+.toc-title { text-align: center; font-family: var(--ff-heading); font-size: var(--fs-h1); font-weight: var(--fw-bold); color: var(--color-primary); text-indent: 0; margin-bottom: 1em; }
+.toc-list, .toc-list ol, .toc-list ul { list-style: none; }
+.toc-list li { margin-bottom: 0.5em; text-indent: 0; }
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; }
+th, td { border: 1px solid var(--color-border); padding: 0.45em 0.6em; text-align: left; font-size: var(--fs-body); vertical-align: top; }
+th { background: var(--color-primary); color: #ffffff; font-family: var(--ff-heading); font-weight: var(--fw-bold); }
+.qtable td:first-child { font-family: var(--ff-heading); font-weight: var(--fw-bold); color: var(--color-primary); width: 4.5em; }
+ul, ol { margin: 0.5em 0 1em 2em; }
+li { margin-bottom: 0.35em; text-align: justify; }
+.note { border-left: 3px solid var(--color-primary); background: var(--color-callout-bg); padding: 8px; text-indent: 0; }
+</style>
+</head>
+<body>
+<section role="cover">
+  <p class="cover-title">文档问答功能测试话术脚本</p>
+  <p class="cover-sub">15 项测试用例 · 覆盖云端/本地与降级路径</p>
+  <p class="cover-meta">配套素材：《云岚科技员工手册（2026 版）》<br>适用版本：v0.1.157 及以上<br>测试执行记录用</p>
+</section>
+<section role="cover">
+  <nav class="doc-toc" aria-label="文档目录">
+    <p class="toc-title">目录</p>
+    <ol class="toc-list">
+      <li><a href="#s1">一、测试准备</a></li>
+      <li><a href="#s2">二、基础事实提取（单跳检索）</a></li>
+      <li><a href="#s3">三、多条件与易混数据（精度测试）</a></li>
+      <li><a href="#s4">四、跨章节与综合归纳</a></li>
+      <li><a href="#s5">五、拒答与边界（防编造）</a></li>
+      <li><a href="#s6">六、检索方式专项（Ollama 开关对比）</a></li>
+      <li><a href="#s7">七、结果记录表</a></li>
+      <li><a href="#s8">八、常见问题排查</a></li>
+    </ol>
+  </nav>
+</section>
+<section role="body" data-page-restart="1">
+  <h1 id="s1">一、测试准备</h1>
+  <h2>（一）素材与导入</h2>
+  <p>本脚本配套测试文档《云岚科技员工手册（2026 版）》。测试前请将该文档导入文档问答的知识库：进入「文档问答」→ 点击「导入文本文档」→ 选择该 docx 文件 → 等待提示「已导入，切分 N 块」。</p>
+  <p>确认知识库文档列表中出现「文档问答测试文档.docx」且块数大于 0，再开始以下测试。若之前导入过旧版本，请先长按删除后重新导入。</p>
+  <h2>（二）两种模式各测一遍</h2>
+  <p>每项测试建议在两种模式下分别执行，观察差异：</p>
+  <ul>
+    <li>云端模式 + Ollama 开启：向量检索 + 云端模型回答（最精准）。</li>
+    <li>云端模式 + Ollama 关闭：关键词检索 + 云端模型回答（降级路径，重点验证「关掉 Ollama 仍可用」）。</li>
+    <li>本地模式 + Ollama 开启：向量检索 + 本机 Ollama 模型回答。</li>
+  </ul>
+  <p>切换方式：页面顶部「服务类型」下拉选云端/本地；「本地服务」开关控制 Ollama。切换模式后无需重新导入文档。</p>
+  <h2>（三）判定标准</h2>
+  <ul>
+    <li>正确：回答包含预期要点，且不编造文档中没有的信息。</li>
+    <li>部分正确：命中部分要点或有轻微遗漏，记录具体差异。</li>
+    <li>错误：答非所问、答错数值、或编造了手册里不存在的内容。</li>
+  </ul>
+
+  <h1 id="s2">二、基础事实提取（单跳检索）</h1>
+  <h2>测试 1：公司基本信息</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>云岚科技成立于什么时候？总部在哪里？</td></tr>
+      <tr><td>预期要点</td><td>2018 年 3 月 15 日成立；总部位于杭州市余杭区文一西路 969 号未来科技城 A 座 12 层。</td></tr>
+      <tr><td>测试目的</td><td>验证最基础的单段落事实检索。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 2：关键人物</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>公司的法定代表人和总经理分别是谁？人力资源部负责人是谁？</td></tr>
+      <tr><td>预期要点</td><td>法定代表人陈明远，总经理李思琪，人力资源部负责人王海燕。</td></tr>
+      <tr><td>测试目的</td><td>验证同一段落内多个实体的抽取。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 3：联系方式</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>人力资源部的联系电话和邮箱是什么？</td></tr>
+      <tr><td>预期要点</td><td>电话 0571-8899-1201，邮箱 hr@yunlan-tech.example。</td></tr>
+      <tr><td>测试目的</td><td>验证数字串与邮箱等特殊格式的检索与还原。</td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s3">三、多条件与易混数据（精度测试）</h1>
+  <h2>测试 4：年休假分档</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>工作满 8 年的员工年休假几天？满 15 年呢？满 22 年呢？</td></tr>
+      <tr><td>预期要点</td><td>满 8 年（满 1 不满 10）为 5 天；满 15 年（满 10 不满 20）为 10 天；满 22 年（满 20）为 15 天。</td></tr>
+      <tr><td>测试目的</td><td>三个相近数值分档，检验是否张冠李戴——这是最容易答错的题。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 5：差旅住宿标准</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>去上海出差住宿费上限多少？去省外其他城市呢？省内呢？</td></tr>
+      <tr><td>预期要点</td><td>上海属一线城市 500 元/晚；其他省外城市 400 元/晚；省内 300 元/晚。</td></tr>
+      <tr><td>测试目的</td><td>同为住宿金额的三档数据，检验条件匹配能力。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 6：审批金额门槛</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>报销金额 800 元、3000 元、6000 元分别需要谁审批？</td></tr>
+      <tr><td>预期要点</td><td>800 元由直属主管审批；3000 元需直属主管加部门负责人两级；6000 元需再加财务负责人审批。</td></tr>
+      <tr><td>测试目的</td><td>金额区间与审批层级的对应，检验边界判断。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 7：假期天数辨析</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>婚假、产假、陪产假、丧假分别是多少天？</td></tr>
+      <tr><td>预期要点</td><td>婚假 10 天；产假 98 天（难产加 15 天、多胞胎每多一胎加 15 天）；陪产假 15 天；直系亲属丧假 3 天（异地加 2 天路程假）。</td></tr>
+      <tr><td>测试目的</td><td>多个假期天数集中在一句话，检验是否遗漏或串位。</td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s4">四、跨章节与综合归纳</h1>
+  <h2>测试 8：跨章节汇总</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>公司给员工提供哪些补贴？分别多少钱？</td></tr>
+      <tr><td>预期要点</td><td>餐补每工作日 30 元、交通补贴每月 200 元、通讯补贴每月 100 元、节日福利每次 300 元购物卡、出差餐补每天 80 元（分布在薪酬与报销两章）。</td></tr>
+      <tr><td>测试目的</td><td>验证能否跨章节聚合分散信息。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 9：流程类问题</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>员工离职需要办理哪些交接手续？</td></tr>
+      <tr><td>预期要点</td><td>设备归还、账号注销、文档移交三项，全部完成后由人力资源部出具离职证明。</td></tr>
+      <tr><td>测试目的</td><td>验证流程步骤类内容的检索。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 10：会议室容量</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>20 人的会议应该订哪个会议室？4 人呢？</td></tr>
+      <tr><td>预期要点</td><td>20 人订太湖厅；4 人订千岛厅（另有西湖厅 12 人、钱塘厅 8 人）。</td></tr>
+      <tr><td>测试目的</td><td>表格数据的检索与反问推理。</td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s5">五、拒答与边界（防编造）</h1>
+  <h2>测试 11：文档中没有的信息</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>公司的年度营收是多少？</td></tr>
+      <tr><td>预期要点</td><td>手册中未提及营收数据，应明确回答「资料中未提及」或类似表述，不得编造数字。</td></tr>
+      <tr><td>测试目的</td><td>验证模型是否会凭空捏造——这是 RAG 安全性的关键测试。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 12：文档外的常识问题</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>杭州明天天气怎么样？</td></tr>
+      <tr><td>预期要点</td><td>应说明文档中没有相关信息，而非强行用文档内容回答。</td></tr>
+      <tr><td>测试目的</td><td>验证无关问题的处理能力。</td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s6">六、检索方式专项（Ollama 开关对比）</h1>
+  <h2>测试 13：开关切换一致性</h2>
+  <p>操作步骤：</p>
+  <ol>
+    <li>开启 Ollama、选云端模式，记录测试 1 和测试 4 的回答。</li>
+    <li>关闭 Ollama（服务类型保持云端），确认页面出现「将使用关键词检索」提示、导入与提问按钮仍可点击。</li>
+    <li>用完全相同的两个问题再问一遍，对比两次回答。</li>
+  </ol>
+  <table class="qtable">
+    <tbody>
+      <tr><td>预期要点</td><td>两种状态下都能正常回答，要点一致。关键词检索精度可能略低，但不应完全失败或报错。</td></tr>
+      <tr><td>测试目的</td><td>核心验证——关闭 Ollama 后云端模式仍可用。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 14：关键词原词命中</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>（关闭 Ollama 时）公积金 缴存比例 12%</td></tr>
+      <tr><td>预期要点</td><td>能命中薪酬章节，回答公积金缴存比例为工资基数的 12%、每年 7 月调整。</td></tr>
+      <tr><td>测试目的</td><td>关键词检索模式下，用文档原词能否命中。</td></tr>
+    </tbody>
+  </table>
+  <h2>测试 15：同义改写命中</h2>
+  <table class="qtable">
+    <tbody>
+      <tr><td>提问</td><td>（关闭 Ollama 时）指纹打卡迟到要扣多少钱？</td></tr>
+      <tr><td>预期要点</td><td>命中考勤章节，回答迟到或早退每次扣 50 元、月累计超 3 次另扣全勤奖 200 元。</td></tr>
+      <tr><td>测试目的</td><td>问法与原文措辞不完全一致时，关键词检索的召回能力。</td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s7">七、结果记录表</h1>
+  <p>按实际测试情况填写，重点记录 4、5、6、11、13、14、15 的结果，这几项最能反映检索质量与降级路径是否正常。</p>
+  <table>
+    <thead><tr><th>测试编号</th><th>场景</th><th>模式</th><th>判定</th><th>问题记录</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>公司基本信息</td><td>云端+Ollama</td><td></td><td></td></tr>
+      <tr><td>4</td><td>年休假分档</td><td>云端+Ollama</td><td></td><td></td></tr>
+      <tr><td>4</td><td>年休假分档</td><td>云端关Ollama</td><td></td><td></td></tr>
+      <tr><td>11</td><td>拒答测试</td><td>云端+Ollama</td><td></td><td></td></tr>
+      <tr><td>13</td><td>开关一致性</td><td>对比两态</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h1 id="s8">八、常见问题排查</h1>
+  <p>导入后提问提示「知识库为空」：说明文档未成功切块入库，删除后重新导入，确认块数大于 0。</p>
+  <p>关闭 Ollama 后按钮变灰：属旧版本行为，请升级到 v0.1.157 及以上；新版本云端模式关闭 Ollama 会自动改用关键词检索，按钮保持可用。</p>
+  <p>回答编造了文档里没有的内容：把问题换得更明确，并在提问中强调「只根据文档回答」；若仍编造，记录为测试 11 的失败案例。</p>
+  <p>关键词检索答非所问：尽量使用文档中的原词提问；如需更强的语义理解，请开启 Ollama 切换回向量检索。</p>
+</section>
+</body>
+</html>

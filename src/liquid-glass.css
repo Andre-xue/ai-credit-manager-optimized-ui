@@ -1,0 +1,228 @@
+/* ============================================================
+   AI 魔方 · 手机端液态玻璃（Liquid Glass）界面
+   仅对 .phone-shell（Capacitor 安卓/iOS 原生端）生效；
+   用户可在偏好设置里用 uiStyle 切换（auto/liquid/classic）、uiMotion 关闭动效。
+   桌面端 / Web 完全不受影响。
+   ============================================================ */
+
+/* ---------- 0. 锁定横向：手机端严禁左右滑动，避免"网页复刻感" ---------- */
+html:has(.phone-shell),
+html:has(.phone-shell) body,
+html:has(.phone-shell) #root {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+.phone-shell { overflow-x: hidden; max-width: 100vw; }
+
+/* ---------- 1. 全局背景：柔和渐变 + 浮动光斑 ---------- */
+.phone-shell {
+  position: relative;
+  min-height: 100dvh;
+  background: linear-gradient(160deg, #eef1ff 0%, #f7f3ff 38%, #eefaf6 72%, #f4f7ff 100%);
+  isolation: isolate;
+}
+
+/* 背景光斑层：固定铺满视口并用 overflow 裁剪，杜绝超出视口产生横向滚动。
+   不用 inset:-30%（那会撑出视口导致可左右滑动），改为 inset:0 + 内部渐变位移。 */
+.phone-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 45% at 18% 12%, rgba(129, 140, 248, .30), transparent 70%),
+    radial-gradient(55% 40% at 82% 22%, rgba(244, 114, 182, .22), transparent 70%),
+    radial-gradient(65% 50% at 70% 82%, rgba(45, 212, 191, .24), transparent 70%),
+    radial-gradient(55% 45% at 22% 76%, rgba(96, 165, 250, .22), transparent 70%);
+  filter: blur(20px);
+}
+/* 经典风格：不显示光斑、用纯色背景 */
+.phone-shell:not(.liquid-ui) { background: var(--bg); }
+.phone-shell:not(.liquid-ui)::before { display: none; }
+
+/* ---------- 2. 侧栏抽屉 ---------- */
+/* display:flex !important 强制覆盖 @media(max-width:680px) 里的 .sidebar{display:none}，
+   否则真机窄屏下侧栏被媒体查询隐藏，遮罩出现但抽屉永远不显示（用户反馈的 bug）。 */
+.phone-shell .sidebar {
+  display: flex !important;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: min(82vw, 320px);
+  z-index: 60;
+  height: 100dvh;
+  padding-top: env(safe-area-inset-top, 0px);
+  border-right: 1px solid rgba(255, 255, 255, .5);
+  box-shadow: 8px 0 40px rgba(31, 41, 55, .18);
+  transform: translateX(-104%);
+  visibility: hidden;
+  transition: transform .38s cubic-bezier(.22, 1, .36, 1), visibility .38s;
+  will-change: transform;
+}
+.phone-shell:not(.sidebar-collapsed) .sidebar {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+/* 玻璃质感侧栏（仅液态风格） */
+.phone-shell.liquid-ui .sidebar {
+  background: rgba(255, 255, 255, .62);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+}
+.phone-shell:not(.liquid-ui) .sidebar { background: var(--panel); }
+
+/* 遮罩层 */
+.phone-scrim {
+  position: fixed; inset: 0; z-index: 55;
+  border: none; padding: 0;
+  background: rgba(15, 23, 42, .32);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: scrim-in .3s ease both;
+}
+@keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* 侧栏品牌区与关闭按钮 */
+.phone-shell .sidebar .brand { padding-top: 20px; }
+.phone-shell .sidebar .sidebar-toggle {
+  border-radius: 50%; width: 34px; height: 34px;
+  background: rgba(120, 130, 160, .12);
+}
+.phone-shell .nav { padding-top: 14px; }
+.phone-shell .nav-item {
+  font-size: 14px; padding: 12px 14px; margin-bottom: 5px; border-radius: 14px;
+}
+.nav-pill {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  color: var(--primary); background: rgba(79, 70, 229, .12);
+}
+
+/* ---------- 3. 悬浮菜单按钮（玻璃质感） ---------- */
+.phone-menu-fab {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 12px;
+  z-index: 45;
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  color: var(--text);
+  box-shadow: 0 6px 20px rgba(31, 41, 55, .12), inset 0 1px 0 rgba(255, 255, 255, .7);
+  animation: fab-in .4s cubic-bezier(.22, 1, .36, 1) both;
+}
+.phone-shell:not(.liquid-ui) .phone-menu-fab {
+  background: var(--panel); backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+.phone-menu-fab:active { transform: scale(.92); }
+@keyframes fab-in { from { opacity: 0; transform: translateX(-12px) scale(.85); } to { opacity: 1; transform: none; } }
+
+/* ---------- 4. 主内容区：AI 页为主，占满视口 ---------- */
+.phone-shell .main {
+  min-height: 100dvh;
+  padding-left: 0;
+  display: flex; flex-direction: column;
+}
+/* 手机端：AI 页隐藏全局顶栏（AI 自带顶栏），其余页为悬浮菜单按钮留出顶部空间 */
+.phone-shell .topbar-ai,
+.phone-shell .content-ai .topbar { display: none; }
+.phone-shell .topbar:not(.topbar-ai) { padding-left: 62px; }
+/* 隐藏顶栏里重复的侧栏展开图标（手机端统一用悬浮菜单按钮） */
+.phone-shell .sidebar-show { display: none; }
+.phone-shell .content { padding-left: 16px; padding-right: 16px; }
+
+/* AI 页占满屏；content-ai 的顶部让位 padding 在 claude-ui.css 末尾「手机端 AI 页」段统一管理
+   （claude-ui 的 padding:0!important 加载顺序更晚，必须在那边覆盖才生效） */
+/* 兜底：手机端所有主链路容器禁止横向溢出 */
+.phone-shell .main,
+.phone-shell .content,
+.phone-shell .content-ai,
+.phone-shell .ai-page,
+.phone-shell .ai-shell,
+.phone-shell .ai-messages,
+.phone-shell .ai-welcome,
+.phone-shell .ai-compose { max-width: 100vw; overflow-x: clip; }
+.phone-shell .ai-shell {
+  height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 66px);
+  min-height: 0;
+}
+/* 顶部 App Bar 规则见 claude-ui.css 末尾「手机端 AI 页」段（固定玻璃胶囊，右上三键） */
+/* 下拉菜单：手机端为固定底部弹层（见 claude-ui.css 末尾），不再用视口内绝对定位 */
+/* 欢迎区：占满内容宽度，避免居中边距导致右偏移/右侧被切 */
+.phone-shell .ai-welcome { width: 100%; max-width: 100%; margin: 10px 0 0; }
+.phone-shell .ai-welcome p { white-space: normal; line-height: 1.5; }
+.phone-shell .ai-quick-grid { width: 100%; }
+.phone-shell .ai-quick-card { min-width: 0; }
+.phone-shell .ai-messages { padding: 12px 0; }
+.phone-shell .ai-compose { padding-left: 0; padding-right: 0; }
+
+/* ---------- 5. 液态玻璃卡片/面板质感（手机端全局） ---------- */
+.phone-shell.liquid-ui .stat-card,
+.phone-shell.liquid-ui .account-card,
+.phone-shell.liquid-ui .panel,
+.phone-shell.liquid-ui .set-section,
+.phone-shell.liquid-ui .voice-config,
+.phone-shell.liquid-ui .agent-card,
+.phone-shell.liquid-ui .notice-box,
+.phone-shell.liquid-ui .benefit-card {
+  background: rgba(255, 255, 255, .58);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .7);
+  box-shadow: 0 8px 30px rgba(31, 41, 55, .08), inset 0 1px 0 rgba(255, 255, 255, .85);
+}
+
+/* ---------- 6. 动态效果 ---------- */
+/* 页面进入渐入 */
+.motion-ui.phone-shell .content > * { animation: rise-in .5s cubic-bezier(.22, 1, .36, 1) both; }
+.motion-ui.phone-shell .content > *:nth-child(2) { animation-delay: .05s; }
+.motion-ui.phone-shell .content > *:nth-child(3) { animation-delay: .1s; }
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 光斑缓慢浮动 */
+.motion-ui.phone-shell.liquid-ui::before {
+  /* 只做背景位置呼吸，不对元素做 translate/rotate，避免撑出视口 */
+  animation: blob-drift 18s ease-in-out infinite alternate;
+}
+@keyframes blob-drift {
+  0%   { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+  100% { background-position: 12% 8%, -10% 6%, 8% -8%, -8% -6%; }
+}
+
+/* 侧栏菜单项依次滑入 */
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item { animation: nav-in .4s cubic-bezier(.22, 1, .36, 1) both; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(1) { animation-delay: .08s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(2) { animation-delay: .12s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(3) { animation-delay: .16s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(4) { animation-delay: .20s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(5) { animation-delay: .24s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(6) { animation-delay: .28s; }
+.motion-ui.phone-shell:not(.sidebar-collapsed) .nav-item:nth-child(7) { animation-delay: .32s; }
+@keyframes nav-in { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+
+/* 按钮/卡片点按反馈 */
+.phone-shell .btn:active,
+.phone-shell .nav-item:active,
+.phone-shell .ai-model-btn:active { transform: scale(.96); transition: transform .1s; }
+
+/* 关闭动效：装饰动画由 .motion-ui 移除自动停止。
+   不再用 * 全局 animation/transition:none——会连功能性反馈动画一起禁用导致闪屏/硬切。 */
+
+/* 尊重系统"减少动态效果"偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .phone-shell *, .phone-shell *::before, .phone-shell *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

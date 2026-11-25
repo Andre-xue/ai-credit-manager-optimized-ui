@@ -1,0 +1,33 @@
+[package]
+name = "ai-credit-manager"
+version = "0.1.171"
+description = "AI 积分管家 - 桌面端"
+authors = ["you"]
+edition = "2021"
+
+[lib]
+name = "ai_credit_manager_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "macos-private-api", "protocol-asset"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "blocking"] }
+sha2 = "0.10"
+tokio = { version = "1", features = ["time"] }
+tokio-tungstenite = { version = "0.26", features = ["rustls-tls-webpki-roots"] }
+futures-util = "0.3"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-updater = "2.14.1"
+tauri-plugin-process = "2.4.0"
+tauri-plugin-notification = "2"
+tauri-plugin-global-shortcut = "2"
+tauri-plugin-autostart = "2"
+
+# 火山端到端实时语音桥接骨架（cpal/tokio-tungstenite 等依赖未接入编译）：
+# 当前构建环境无法从 crates.io 下载新依赖，待联网后按 volc_realtime.rs 顶部说明启用。

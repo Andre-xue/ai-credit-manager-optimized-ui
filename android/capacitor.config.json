@@ -1,0 +1,18 @@
+{
+  "name": "ai-credit-manager",
+  "appId": "com.example.aicredit",
+  "appName": "AI 魔方",
+  "webDir": "../dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#4f46e5"
+    },
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}

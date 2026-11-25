@@ -1,0 +1,1 @@
+{"asOf":"2026-11","note":"各平台官方参考单价（元 / 单位，混合估值口径，随版本维护）。调价时更新 prices 并递增 version；客户端拉取后与本地快照对比，有变化时在用量页提醒。","prices":{"anthropic":0.02,"copilot":0.5,"cursor":0.5,"deepseek":0.001,"doubao":0.0008,"elevenlabs":0.1,"figma":0.5,"gemini":0.001,"glm":0.0005,"kim":0.002,"midjourney":1,"openai":0.01,"perplexity":0.01,"qwen":0.0005},"updatedAt":"2026-11-20","version":1}

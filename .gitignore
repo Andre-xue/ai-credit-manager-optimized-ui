@@ -1,0 +1,33 @@
+# ============ 依赖 ============
+node_modules/
+desktop/node_modules/
+android/node_modules/
+
+# ============ 构建产物 ============
+dist/
+*.tsbuildinfo
+desktop/src-tauri/target/
+android/build/
+android/app/build/
+
+# ============ 二进制交付物（图标是构建输入，保留） ============
+*.dmg
+*.app/
+*.apk
+*.ipa
+*.msi
+*.exe
+
+# ============ 版本控制 / 环境 ============
+.git/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# ============ IDE ============
+.vscode/
+.idea/
+*.swp
+__pycache__/

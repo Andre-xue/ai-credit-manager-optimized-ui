@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="description" content="AI 魔方：一个 App 装下所有 AI 工具——对话、生图、视频、翻译、语音、文档问答与各平台额度 / API Key 管理" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <meta name="theme-color" content="#9333ea" />
+    <title>AI 魔方</title>
+    <style>
+      /* 启动占位（JS 加载完成前先渲染，避免手机端长时间白屏；React 挂载后自动替换） */
+      html, body { margin: 0; background: #f4f4f8; }
+      @media (prefers-color-scheme: dark) { html, body { background: #17141f; } }
+      .boot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; height: 100vh; height: 100dvh; font-family: system-ui, -apple-system, sans-serif; }
+      .boot-mark { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #6d28d9, #9333ea); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; animation: bootpulse 1.2s ease-in-out infinite; }
+      .boot-text { font-size: 13px; color: #8a8496; letter-spacing: .12em; }
+      @keyframes bootpulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.92); opacity: .72; } }
+    </style>
+  </head>
+  <body>
+    <div id="root"><div class="boot"><div class="boot-mark">✦</div><div class="boot-text">AI 魔方</div></div></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

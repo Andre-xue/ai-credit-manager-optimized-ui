@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "AI Cube",
+  "version": "0.1.431",
+  "identifier": "com.example.ai-credit-manager",
+  "build": {
+    "beforeDevCommand": "npm run dev --prefix ..",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm run build --prefix ..",
+    "frontendDist": "../../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "AI 魔方",
+        "visible": false,
+        "width": 1180,
+        "height": 780,
+        "minWidth": 900,
+        "minHeight": 600,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$HOME/**"
+        ]
+      },
+      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src 'self' acmplugin: http://acmplugin.localhost; connect-src 'self' ipc: http://ipc.localhost https: http://localhost http://127.0.0.1 https://api.openai.com https://api.anthropic.com https://api.github.com https://github.com https://objects.githubusercontent.com https://wbapp-uxzyxkkqofad4mwe1lca5e.app.workbuddy.host https://www.workbuddy.cn; media-src 'self' blob: data: asset: http://asset.localhost https:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "resources": [
+      "binaries/acm-biometric-aarch64-apple-darwin"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "infoPlist": "Info.plist"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVENDUwOTdBODY4RkUzNjgKUldSbzQ0K0dlZ2xGN1FiYmRUN3NwN09FUWlYWkEyYzZvNTQ1dGNVTjcvR3JDa1k4U3NNcFVNZjQK",
+      "endpoints": [
+        "https://gh-proxy.com/https://github.com/Andre-xue/ai-credit-manager-optimized/releases/latest/download/latest.json",
+        "https://ghproxy.net/https://github.com/Andre-xue/ai-credit-manager-optimized/releases/latest/download/latest.json",
+        "https://github.com/Andre-xue/ai-credit-manager-optimized/releases/latest/download/latest.json"
+      ],
+      "dialog": false
+    }
+  }
+}

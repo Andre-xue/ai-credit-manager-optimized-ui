@@ -1,0 +1,32 @@
+<view class="container ui-{{uiTheme}}">
+  <view class="banner">⏰ 签到仅做提醒：点「复制链接」后在浏览器打开官方页面，由你本人登录并完成领取。本小程序不自动签到、不模拟登录、不保存凭证。</view>
+
+  <view class="card row between">
+    <view>
+      <view class="title">今日签到</view>
+      <view class="hint" style="margin-top:8rpx">{{doneCount}} / {{total}} 已完成 · {{t}}</view>
+    </view>
+    <view class="tag" style="background:var(--primary-soft);color:var(--primary)">{{t}}</view>
+  </view>
+
+  <view class="card item" wx:for="{{list}}" wx:key="id">
+    <view class="row">
+      <view class="logo logo-img"><image src="/assets/logos/{{item.id}}.png" mode="aspectFit" /></view>
+      <view style="flex:1;margin-left:20rpx">
+        <view style="font-size:28rpx;font-weight:600">{{item.name}}</view>
+        <view class="hint" style="margin-top:6rpx">{{item.note}}</view>
+      </view>
+      <view class="tag {{item.done ? 'green' : 'gray'}}">{{item.done ? '已完成' : '待签到'}}</view>
+    </view>
+    <view class="row" style="margin-top:20rpx;gap:16rpx">
+      <view class="btn" data-id="{{item.id}}" bindtap="openOfficial">复制官方链接 ›</view>
+      <view class="btn ghost" data-id="{{item.id}}" bindtap="toggle">{{item.done ? '撤销标记' : '标记完成'}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{list.length === 0}}" class="card empty">
+    <view style="font-size:60rpx">📋</view>
+    <view style="margin-top:16rpx">暂无签到项</view>
+    <view class="hint" style="margin-top:8rpx">先在额度看板添加平台账户</view>
+  </view>
+</view>

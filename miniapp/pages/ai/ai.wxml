@@ -1,0 +1,104 @@
+<view class="ai-page ui-{{uiTheme}}">
+  <!-- 会话检查中 -->
+  <view wx:if="{{!ready}}" class="state-tip">正在打开 AI 助手…</view>
+
+  <!-- 未登录：与桌面/安卓/Web 同一云账号 -->
+  <block wx:elif="{{!user}}">
+    <view class="hero">
+      <view class="mark">✦</view>
+      <view class="title">登录后使用 AI 助手</view>
+      <view class="sub">与 Web / 桌面 / 安卓同一账号，登录后即可使用云端模型对话，并可切换模型引擎</view>
+    </view>
+
+    <view class="login-card">
+      <view class="method-tabs">
+        <view class="method-tab {{method === 'phone' ? 'active' : ''}}" data-method="phone" bindtap="switchMethod">手机号</view>
+        <view class="method-tab {{method === 'email' ? 'active' : ''}}" data-method="email" bindtap="switchMethod">邮箱</view>
+        <view class="method-tab {{method === 'password' ? 'active' : ''}}" data-method="password" bindtap="switchMethod">密码登录</view>
+      </view>
+
+      <block wx:if="{{method === 'phone' || method === 'email'}}">
+        <input class="field" placeholder="{{method === 'phone' ? '11 位手机号' : 'name@example.com'}}" value="{{identifier}}"
+          data-field="identifier" bindinput="onField" />
+        <view class="code-row">
+          <input class="field code-input" placeholder="6 位验证码" value="{{code}}" data-field="code" bindinput="onField" />
+          <view class="code-btn {{busy || countdown > 0 ? 'disabled' : ''}}" bindtap="sendCode">
+            {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
+          </view>
+        </view>
+        <view class="primary-btn {{busy ? 'disabled' : ''}}" bindtap="submitCode">{{busy ? '处理中…' : '登录 / 注册'}}</view>
+      </block>
+
+      <block wx:elif="{{method === 'password'}}">
+        <input class="field" placeholder="邮箱地址或 11 位手机号" value="{{account}}" data-field="account" bindinput="onField" />
+        <input class="field" placeholder="账号密码" password value="{{password}}" data-field="password" bindinput="onField" />
+        <view class="primary-btn {{busy ? 'disabled' : ''}}" bindtap="submitPassword">{{busy ? '登录中…' : '密码登录'}}</view>
+        <view class="login-note">只有设置过密码的账号才能用密码登录；手机号验证码注册的老账号请用验证码登录。</view>
+      </block>
+
+      <view wx:if="{{loginErr}}" class="login-err">{{loginErr}}</view>
+    </view>
+  </block>
+
+  <!-- 已登录：聊天 -->
+  <block wx:else>
+    <view class="chat-head">
+      <view class="model-btn" bindtap="openModels">
+        <text class="model-name">{{modelsLoading ? '模型加载中…' : (modelName || '暂无模型')}}</text>
+        <text class="model-caret">▾</text>
+      </view>
+      <view class="head-actions">
+        <text class="head-link" bindtap="onClear">清空</text>
+        <text class="head-link" bindtap="logout">退出登录</text>
+      </view>
+    </view>
+
+    <scroll-view class="chat-scroll" scroll-y scroll-into-view="{{scrollTo}}" scroll-with-animation>
+      <view wx:if="{{messages.length === 0}}" class="chat-empty">
+        <view class="hero">
+          <view class="mark">✦</view>
+          <view class="title">有什么可以帮你？</view>
+          <view class="sub">关于积分、额度、签到、费用与 API Key 安全，都可以问我</view>
+        </view>
+        <view class="section-label">大家都在问</view>
+        <view class="quick-grid">
+          <view class="quick-card" wx:for="{{quick}}" wx:key="title" data-title="{{item.title}}" bindtap="onQuick">
+            <view class="quick-icon">{{item.icon}}</view>
+            <view class="quick-title">{{item.title}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:for="{{messages}}" wx:key="index" class="msg-row {{item.role === 'user' ? 'me' : 'bot'}}">
+        <view class="bubble {{item.role === 'user' ? 'me' : 'bot'}}">
+          <text wx:if="{{item.content}}">{{item.content}}</text>
+          <text wx:else class="thinking">思考中…</text>
+        </view>
+      </view>
+      <view id="chat-bottom" class="chat-bottom-anchor"></view>
+    </scroll-view>
+
+    <view class="composer">
+      <input class="composer-input" placeholder="输入你的问题…" value="{{input}}" bindinput="onInput"
+        confirm-type="send" bindconfirm="onSend" disabled="{{sendingMsg}}" />
+      <view class="send-btn {{sendingMsg ? 'disabled' : ''}}" bindtap="onSend">{{sendingMsg ? '生成中' : '发送'}}</view>
+    </view>
+  </block>
+
+  <!-- 模型（引擎）选择 -->
+  <view wx:if="{{showModels}}" class="sheet-mask" bindtap="closeModels">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">选择模型引擎</view>
+      <scroll-view class="sheet-list" scroll-y>
+        <view wx:for="{{models}}" wx:key="id" class="model-item {{item.id === modelId ? 'active' : ''}}"
+          data-id="{{item.id}}" bindtap="pickModel">
+          <view class="model-item-main">
+            <view class="model-item-name">{{item.name}}</view>
+            <view wx:if="{{item.provider}}" class="model-item-sub">{{item.provider}}</view>
+          </view>
+          <text wx:if="{{item.id === modelId}}" class="model-check">✓</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

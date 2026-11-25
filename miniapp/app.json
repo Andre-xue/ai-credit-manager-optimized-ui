@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/ai/ai",
+    "pages/benefits/benefits",
+    "pages/settings/settings",
+    "pages/usage/usage"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1b1932",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "AI 积分管家",
+    "backgroundColor": "#0d0c1b",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#8d86b4",
+    "selectedColor": "#a996ff",
+    "backgroundColor": "#1b1932",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "看板"
+      },
+      {
+        "pagePath": "pages/detail/detail",
+        "text": "签到"
+      },
+      {
+        "pagePath": "pages/ai/ai",
+        "text": "AI"
+      },
+      {
+        "pagePath": "pages/benefits/benefits",
+        "text": "福利"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
