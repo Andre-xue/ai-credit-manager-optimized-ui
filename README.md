@@ -85,17 +85,17 @@ npm run dev     # 启动，然后浏览器访问 http://localhost:5173
 
 ### 各平台安装包下载（GitHub Releases）
 
-访问 https://github.com/Andre-xue/ai-credit-manager-optimized/releases/latest 下载最新版本：
+**八套 UI 主题改版安装包** → https://github.com/Andre-xue/ai-credit-manager-optimized-ui/releases/tag/v0.1.431-ui
 
-| 平台 | 文件格式 | 说明 |
-|------|----------|------|
-| macOS Apple Silicon | `.dmg` | M1/M2/M3/M4 |
-| macOS Intel | `.dmg` | Intel 芯片 |
-| Windows | `.msi` / `.exe` | 64 位 |
-| Linux | `.AppImage` / `.deb` | 64 位 |
-| Android | `.apk` | Debug 版，安装时选"允许未知来源" |
+| 平台 | 文件名 | 说明 |
+|------|--------|------|
+| macOS Apple Silicon | `macOS-arm64-UI8-themes.dmg` | M1/M2/M3/M4，已校验 CRC32 |
+| Web 静态版 | `Web-UI8-themes.zip` | 解压后用任意静态服务器打开，全平台浏览器可用 |
+| Docker 镜像 | `Docker-image-UI8-themes.tar.gz` | `docker load -i` 后运行，含完整八套主题 |
+| Android | `Android-UI8-themes.apk` | Debug 版，安装时选"允许未知来源" |
+| 校验清单 | `SHA256SUMS-ui.txt` | 下载后用 `shasum -a 256 -c` 校验 |
 
-这些包由 GitHub Actions 在多平台 runner 上自动编译，打 `v*` 标签时触发。
+原项目（旧 UI）的历史安装包仍保留在 https://github.com/Andre-xue/ai-credit-manager-optimized/releases/latest ，包含 Windows `.msi`/`.exe`、Linux `.AppImage`/`.deb`、macOS Intel 版。这些平台的**八套主题新版**可在启用 `.github/workflow-templates/` 中的 CI 后由 GitHub Actions 自动编译。
 
 **关于 iOS**：Apple 要求所有 iOS 应用必须签名才能在真机安装，签名需要加入 Apple Developer 计划（$99/年）。因此无法提供可直接安装的 IPA。可选方案：
 1. **自行编译**（免费）：在有 Xcode 的 Mac 上 `cd android && npx cap add ios && npx cap sync ios && npx cap open ios`，用免费开发者账号签名后安装到自己的设备
