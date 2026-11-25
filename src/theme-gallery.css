@@ -16,9 +16,23 @@
    3) 对历史 CSS 中散落的硬编码白底 / 紫按钮做一次统一收敛。
    ============================================================ */
 
-/* ---------- 1. 语义变量映射（两层结构，兼容明暗模式） ---------- */
+/* ---------- 1. 语义变量映射（两层结构，兼容明暗模式） ----------
+   关键：claude-ui.css / redesign.css 在 .claude-ui、:root[data-theme=dark]
+   .claude-ui、.app-shell.liquid-ui 这些「元素自身」上重定义了全套语义变量。
+   CSS 自定义属性里，元素自身定义的值会压过从 <html> 继承的值——因此只把
+   主题映射写在 html 上不够：外壳整棵子树仍用旧变量，用户切主题只看到按钮
+   渐变变化，误以为「主题没生效」。这里把同一份映射同时落到真实渲染元素
+   (.app-shell / .phone-shell) 上，用更高 specificity 覆盖旧定义。          */
 html[data-ui-theme],
-html[data-ui-theme][data-theme='dark'] {
+html[data-ui-theme][data-theme='dark'],
+html[data-ui-theme] .app-shell,
+html[data-ui-theme] .phone-shell,
+html[data-ui-theme] .claude-ui.app-shell,
+html[data-ui-theme] .app-shell.liquid-ui,
+html[data-ui-theme][data-theme='dark'] .app-shell,
+html[data-ui-theme][data-theme='dark'] .phone-shell,
+html[data-ui-theme][data-theme='dark'] .claude-ui.app-shell,
+html[data-ui-theme][data-theme='dark'] .app-shell.liquid-ui {
   --bg: var(--t-bg);
   --panel: var(--t-panel);
   --panel-2: var(--t-panel-2);
@@ -490,13 +504,48 @@ html[data-ui-theme='aurora'] .app-shell::before {
 }
 html[data-ui-theme='aurora'] .app-shell > .sidebar,
 html[data-ui-theme='aurora'] .app-shell > .main { position:relative; z-index:1; }
+/* 注意：liquid-global.css 的 .app-shell.liquid-ui .card{background:#ffffffa8!important}
+   特异性 (0,3,0) 高于旧的 html[data-ui-theme=aurora] .card (0,2,1)，
+   导致极光主题卡片在深色画布上仍是浅色白块。这里补上 .app-shell.liquid-ui
+   把特异性抬到 (0,4,1)，并同时覆盖 :root[data-theme=dark] 分支。           */
 html[data-ui-theme='aurora'] .panel,
 html[data-ui-theme='aurora'] .card,
+html[data-ui-theme='aurora'] .stat-card,
 html[data-ui-theme='aurora'] .set-card,
-html[data-ui-theme='aurora'] .bento-tile {
+html[data-ui-theme='aurora'] .set-section,
+html[data-ui-theme='aurora'] .gen-panel,
+html[data-ui-theme='aurora'] .agent-card,
+html[data-ui-theme='aurora'] .account-card,
+html[data-ui-theme='aurora'] .onboarding-card,
+html[data-ui-theme='aurora'] .sd-block,
+html[data-ui-theme='aurora'] .bento-tile,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .panel,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .stat-card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .set-card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .set-section,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .gen-panel,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .agent-card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .account-card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .onboarding-card,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .sd-block,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .bento-tile,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .panel,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .card,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .stat-card,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .bento-tile {
   background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.012)) , var(--panel) !important;
   border-color:rgba(169,150,255,.20) !important;
   backdrop-filter:blur(16px) saturate(1.3); -webkit-backdrop-filter:blur(16px) saturate(1.3);
+}
+/* 极光主题下侧栏 / 顶栏同样不能被 liquid 的浅色玻璃写死 */
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .sidebar,
+html[data-ui-theme='aurora'] .app-shell.liquid-ui .topbar,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .sidebar,
+html[data-ui-theme='aurora'][data-theme='dark'] .app-shell.liquid-ui .topbar {
+  background:var(--panel-2) !important;
+  border-right-color:rgba(169,150,255,.18) !important;
+  border-bottom-color:rgba(169,150,255,.18) !important;
 }
 html[data-ui-theme='aurora'] .nav-item.active {
   box-shadow:inset 0 0 0 1px rgba(169,150,255,.36),0 4px 18px -8px rgba(169,150,255,.5) !important;
