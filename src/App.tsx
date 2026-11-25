@@ -925,7 +925,7 @@ function App() {
   const portfolioValue = totalPortfolioValue(state)
   const healthRows = useMemo(() => scoreAccounts(state), [state])
 
-  // ---- 外观主题：八套设计共用组件与数据；写入 <html data-ui-theme> 并做本机首屏缓存 ----
+  // ---- 外观主题：九套设计共用组件与数据；写入 <html data-ui-theme> 并做本机首屏缓存 ----
   const uiTheme = state.settings.uiTheme ?? 'aurora'
   useEffect(() => { applyUiTheme(uiTheme) }, [uiTheme])
 
@@ -1317,7 +1317,7 @@ function App() {
   // 手机端侧栏：与桌面端使用同一分组顺序；手机客户端不含文档问答（无本机服务）
   const drawerTabs: Tab[] = (['ai', 'dashboard', 'workshop', 'keys', 'usage', 'calendar', 'voice', 'plugins', 'settings'] as Tab[])
 
-  // 八套主题只改变显示层；极光沿用现有系统级玻璃能力，其余主题由统一设计令牌驱动。
+  // 九套主题只改变显示层；极光与液态玻璃沿用系统级玻璃能力，其余主题由统一设计令牌驱动。
   const liquidUi = state.settings.uiStyle === 'liquid' || uiTheme === 'aurora'
   const motionOn = state.settings.uiMotion !== false
   const shellClass = [
@@ -5554,7 +5554,7 @@ function SettingsView({ state, onChange, notify, onOpenVault, onClear, onChangeP
                 <span className="theme-heading-copy">
                   <strong>{t('界面主题')}<ChevronDown size={16} className="theme-collapse-chevron" /></strong>
                   <span className="theme-heading-desc">{themeGalleryOpen
-                    ? t('八套完整视觉与交互语言，点击即时切换；选择仅保存在本机，不影响任何业务数据。')
+                    ? t('九套完整视觉与交互语言，点击即时切换；选择仅保存在本机，不影响任何业务数据。')
                     : t(UI_THEMES.find(theme => theme.id === (s.uiTheme ?? 'aurora'))?.description ?? '极光琉璃')}</span>
                 </span>
                 <span className="theme-heading-actions">
@@ -5588,7 +5588,7 @@ function SettingsView({ state, onChange, notify, onOpenVault, onClear, onChangeP
                       )
                     })}
                   </div>
-                  <div className="theme-gallery-note">{t('暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；其他主题继续响应上方的明暗模式。关闭动态效果后会停用视差、光斑和弹性动画。')}</div>
+                  <div className="theme-gallery-note">{t('暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；液态玻璃与其余主题响应明暗模式。关闭动态效果后会停用视差、光斑和弹性动画。')}</div>
                 </div>
               </div>
             </div>

@@ -174,7 +174,7 @@ export interface NotifyPrefs {
   monthlyReport: boolean
 }
 
-export type UiThemeId = 'precision' | 'studio' | 'command' | 'island' | 'aurora' | 'lumin' | 'hud' | 'editorial'
+export type UiThemeId = 'precision' | 'studio' | 'command' | 'island' | 'aurora' | 'lumin' | 'hud' | 'editorial' | 'liquidglass'
 
 export interface AppSettings {
   /** 本地加密主密码校验位（不存明文） */

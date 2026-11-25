@@ -1605,3 +1605,12 @@ Object.assign(D, {
   '扫描光效、实时脉冲、指令面板': { 'zh-TW': '掃描光效、即時脈衝、指令面板', en: 'Scan glow, live pulses, command panels', ja: 'スキャン光、リアルタイムパルス、コマンドパネル', ko: '스캔 광효과, 실시간 펄스, 커맨드 패널' },
   '章节转场、阅读进度、细节展开': { 'zh-TW': '章節轉場、閱讀進度、細節展開', en: 'Chapter transitions, reading progress, detail reveal', ja: '章の切り替え、読書進捗、詳細の展開', ko: '챕터 전환, 읽기 진행률, 세부 전개' },
 })
+
+// ---- 补齐批次 49：第九套「液态玻璃」主题（苹果风格半透明材质） ----
+Object.assign(D, {
+  '液态玻璃': { 'zh-TW': '液態玻璃', en: 'Liquid Glass', ja: 'リキッドグラス', ko: '리퀴드 글래스' },
+  '苹果液态玻璃 · 半透明折射 · 悬浮高光': { 'zh-TW': '蘋果液態玻璃 · 半透明折射 · 懸浮高光', en: 'Apple liquid glass · translucent refraction · floating highlights', ja: 'Apple リキッドグラス · 半透明の屈折 · 浮遊ハイライト', ko: '애플 리퀴드 글래스 · 반투명 굴절 · 플로팅 하이라이트' },
+  '折射高光、焦点吸附、弹性回弹': { 'zh-TW': '折射高光、焦點吸附、彈性回彈', en: 'Refracted highlights, focus snap, springy rebound', ja: '屈折ハイライト、フォーカススナップ、弾性リバウンド', ko: '굴절 하이라이트, 포커스 스냅, 탄성 리바운드' },
+  '九套完整视觉与交互语言，点击即时切换；选择仅保存在本机，不影响任何业务数据。': { 'zh-TW': '九套完整視覺與互動語言，點擊即時切換；選擇僅保存在本機，不影響任何業務資料。', en: 'Nine complete visual and interaction languages; tap to switch instantly. The choice is stored locally only and never touches business data.', ja: '9種類のビジュアル／インタラクション言語を搭載。タップで即時切り替え。選択は端末内にのみ保存され、業務データには一切影響しません。', ko: '9가지 완전한 시각·상호작용 언어를 제공하며 탭하면 즉시 전환됩니다. 선택은 기기에만 저장되며 어떤 비즈니스 데이터에도 영향을 주지 않습니다.' },
+  '暗夜指挥舱、极光琉璃与星舰 HUD 使用固定深色画布；液态玻璃与其余主题响应明暗模式。关闭动态效果后会停用视差、光斑和弹性动画。': { 'zh-TW': '暗夜指揮艙、極光琉璃與星艦 HUD 使用固定深色畫布；液態玻璃與其餘主題響應明暗模式。關閉動態效果後會停用視差、光斑與彈性動畫。', en: 'Night Command, Aurora Glass and Starship HUD use a fixed dark canvas; Liquid Glass and the rest follow the light/dark setting. Turning off motion disables parallax, glow and spring animations.', ja: '暗夜指揮艙・極光琉璃・スターシップ HUD は固定のダークキャンバスを使用し、リキッドグラスと他テーマはライト／ダーク設定に従います。動きを減らすと視差・グロー・スプリングアニメーションが無効になります。', ko: '나이트 커맨드, 오로라 글래스, 스타십 HUD는 고정 다크 캔버스를 사용하고 리퀴드 글래스와 나머지 테마는 라이트/다크 설정을 따릅니다. 모션을 끄면 패럴랙스, 글로우, 스프링 애니메이션이 비활성화됩니다.' },
+})

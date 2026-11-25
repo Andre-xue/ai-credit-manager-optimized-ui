@@ -5,7 +5,7 @@
     <view class="section-title">界面外观</view>
     <view class="theme-block">
       <view class="theme-heading {{themeExpanded ? '' : 'collapsed'}}" bindtap="toggleThemePanel" hover-class="theme-heading-hover">
-        <text class="theme-heading-text">八套全平台主题</text>
+        <text class="theme-heading-text">九套全平台主题</text>
         <view class="theme-heading-actions">
           <text class="theme-current">当前 · {{uiThemeName}}</text>
           <text class="theme-expand-label">{{themeExpanded ? '收起' : '展开'}} {{themeExpanded ? '▴' : '▾'}}</text>

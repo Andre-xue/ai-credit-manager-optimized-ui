@@ -200,6 +200,23 @@ html[data-ui-theme='editorial'] {
   --t-grad:linear-gradient(120deg,#c54c31,#8c5a3c); --t-glow:rgba(197,76,49,.14); --t-ring:rgba(197,76,49,.24);
 }
 
+/* I · 液态玻璃：苹果风格半透明折射、彩色光斑画布、悬浮高光描边 */
+html[data-ui-theme='liquidglass'] {
+  --t-bg:#eaf2fb; --t-panel:#ffffffcc; --t-panel-2:#ffffffb8; --t-panel-3:#eef4fc;
+  --t-border:rgba(255,255,255,.72); --t-border-strong:rgba(120,150,190,.30);
+  --t-text:#1c1c1e; --t-text-2:#4a5568; --t-text-3:#8592a3;
+  --t-primary:#0a84ff; --t-primary-2:#7d7cff; --t-primary-soft:#e3f0ff; --t-primary-hover:#0070e0;
+  --t-on-primary:#ffffff;
+  --t-green:#0a9d6b; --t-green-soft:#e3f7ef; --t-amber:#b87b0e; --t-amber-soft:#fff5df;
+  --t-red:#e0433e; --t-red-soft:#fdeaea; --t-blue:#0a84ff; --t-blue-soft:#e3f0ff;
+  --t-radius:22px; --t-radius-sm:14px; --t-radius-lg:30px;
+  --t-shadow:0 1px 2px rgba(28,28,30,.04),0 6px 20px -8px rgba(40,80,140,.14);
+  --t-shadow-md:0 10px 32px -12px rgba(40,80,140,.22),0 2px 8px -2px rgba(28,28,30,.06);
+  --t-shadow-lg:0 28px 64px -20px rgba(40,80,140,.32);
+  --t-grad:linear-gradient(120deg,#0a84ff,#4f9dff 45%,#7d7cff); --t-glow:rgba(10,132,255,.22); --t-ring:rgba(10,132,255,.32);
+  --t-glass-solid:#ffffff;
+}
+
 /* ---------- 3. 八套主题色板 · 深色模式分支 ---------- */
 /* 浅色系主题在用户选择「深色 / 跟随系统」时切换到同色系深版；
    固定深色主题（C/E/G）保持自身画布，不受明暗模式影响。 */
@@ -252,6 +269,19 @@ html[data-ui-theme='editorial'][data-theme='dark'] {
   --t-green:#9ec48f; --t-green-soft:#212c1d; --t-amber:#e8bd70; --t-amber-soft:#32280f;
   --t-red:#f08d7e; --t-red-soft:#3a1f1b; --t-blue:#8fb2d8; --t-blue-soft:#1c2a3a;
   --t-grad:linear-gradient(120deg,#b6452c,#e8795f); --t-glow:rgba(232,121,95,.16); --t-ring:rgba(232,121,95,.26);
+  color-scheme:dark;
+}
+/* I · 液态玻璃深色：冷调深色玻璃、半透明高光边 */
+html[data-ui-theme='liquidglass'][data-theme='dark'] {
+  --t-bg:#0b1017; --t-panel:#1b2434cc; --t-panel-2:#222d40b8; --t-panel-3:#2a364b;
+  --t-border:rgba(255,255,255,.14); --t-border-strong:rgba(150,180,220,.32);
+  --t-text:#f4f7ff; --t-text-2:#b9c6db; --t-text-3:#8493ab;
+  --t-primary:#5aa9ff; --t-primary-2:#a99dff; --t-primary-soft:#1b3050; --t-primary-hover:#82c0ff;
+  --t-on-primary:#05162b;
+  --t-green:#4fd6a0; --t-green-soft:#11322a; --t-amber:#f0c46b; --t-amber-soft:#33270f;
+  --t-red:#ff8a8a; --t-red-soft:#3a1a20; --t-blue:#5aa9ff; --t-blue-soft:#172c4a;
+  --t-grad:linear-gradient(120deg,#2b7fff,#5aa9ff 45%,#a99dff); --t-glow:rgba(90,169,255,.24); --t-ring:rgba(90,169,255,.36);
+  --t-glass-solid:#1b2434;
   color-scheme:dark;
 }
 /* 固定深色：无论 data-theme 取值都用自身画布，防止被 redesign 通用深色覆盖 */
@@ -465,6 +495,11 @@ html[data-ui-theme] .modal { border-radius:var(--radius) !important; box-shadow:
 .theme-preview-lumin     { --pv-bg:#f7f9fc; --pv-side:#e4eaf3; --pv-panel:#ffffff; --pv-primary:linear-gradient(90deg,#0969da,#7c3aed); --pv-glow:rgba(124,58,237,.3); }
 .theme-preview-hud       { --pv-bg:#050d13; --pv-side:#10222d; --pv-panel:#0b1821; --pv-primary:#64ffda; --pv-glow:rgba(56,189,248,.45); }
 .theme-preview-editorial { --pv-bg:#eee9df; --pv-side:#ded6c7; --pv-panel:#faf7f0; --pv-primary:#c54c31; --pv-glow:rgba(197,76,49,.3); }
+.theme-preview-liquidglass { --pv-bg:#dceaf9; --pv-side:#c3d9f2; --pv-panel:#ffffffd9; --pv-primary:linear-gradient(90deg,#0a84ff,#7d7cff); --pv-glow:rgba(10,132,255,.5); }
+.theme-preview-liquidglass::after {
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(45% 60% at 15% 15%,rgba(125,124,255,.35),transparent 72%),radial-gradient(50% 55% at 85% 80%,rgba(10,132,255,.30),transparent 72%);
+}
 
 @media (max-width:1180px) { .theme-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:560px) {
@@ -626,6 +661,84 @@ html[data-ui-theme='editorial'] .set-section + .set-section,
 html[data-ui-theme='editorial'] .card + .card { border-top:2px solid var(--text) !important; }
 html[data-ui-theme='editorial'] .btn.primary { border-radius:2px !important; }
 
+/* I · 液态玻璃：彩色光斑背景、半透明折射、内高光边、焦点吸附弹性 */
+html[data-ui-theme='liquidglass'] .app-shell { position:relative; }
+html[data-ui-theme='liquidglass'] .app-shell::before {
+  content:""; position:fixed; inset:-25% -15% auto -15%; height:100vh; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(38% 46% at 14% 20%,rgba(90,170,255,.32),transparent 72%),
+    radial-gradient(34% 42% at 84% 14%,rgba(125,124,255,.26),transparent 74%),
+    radial-gradient(44% 48% at 62% 80%,rgba(96,200,255,.24),transparent 74%),
+    radial-gradient(36% 40% at 26% 72%,rgba(255,160,210,.16),transparent 76%);
+  filter:blur(34px); animation:liquidDrift 22s ease-in-out infinite alternate;
+}
+html[data-ui-theme='liquidglass'][data-theme='dark'] .app-shell::before {
+  background:
+    radial-gradient(38% 46% at 14% 20%,rgba(42,110,220,.30),transparent 72%),
+    radial-gradient(34% 42% at 84% 14%,rgba(110,80,220,.26),transparent 74%),
+    radial-gradient(44% 48% at 62% 80%,rgba(30,120,190,.22),transparent 74%);
+}
+/* 只给内容层提层级，绝不命中 fixed 弹窗（见 C 主题注释） */
+html[data-ui-theme='liquidglass'] .app-shell > .sidebar,
+html[data-ui-theme='liquidglass'] .app-shell > .main { position:relative; z-index:1; }
+/* 玻璃面板：半透明底 + 背景模糊 + 内高光描边 */
+html[data-ui-theme='liquidglass'] .panel,
+html[data-ui-theme='liquidglass'] .card,
+html[data-ui-theme='liquidglass'] .stat-card,
+html[data-ui-theme='liquidglass'] .set-card,
+html[data-ui-theme='liquidglass'] .set-section,
+html[data-ui-theme='liquidglass'] .gen-panel,
+html[data-ui-theme='liquidglass'] .sd-block,
+html[data-ui-theme='liquidglass'] .bento-tile,
+html[data-ui-theme='liquidglass'] .account-card,
+html[data-ui-theme='liquidglass'] .agent-card,
+html[data-ui-theme='liquidglass'] .ai-quick-card,
+html[data-ui-theme='liquidglass'] .onboarding-card,
+html[data-ui-theme='liquidglass'] .modal,
+html[data-ui-theme='liquidglass'] .set-modal,
+html[data-ui-theme='liquidglass'] .cmdk-panel,
+html[data-ui-theme='liquidglass'] .ai-model-menu,
+html[data-ui-theme='liquidglass'] .toast,
+html[data-ui-theme='liquidglass'] .ai-compose-box,
+html[data-ui-theme='liquidglass'] .seg-control {
+  background:var(--panel) !important; border-color:var(--t-border) !important;
+  backdrop-filter:blur(20px) saturate(1.6); -webkit-backdrop-filter:blur(20px) saturate(1.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--shadow) !important;
+}
+html[data-ui-theme='liquidglass'][data-theme='dark'] .panel,
+html[data-ui-theme='liquidglass'][data-theme='dark'] .card,
+html[data-ui-theme='liquidglass'][data-theme='dark'] .stat-card,
+html[data-ui-theme='liquidglass'][data-theme='dark'] .set-card,
+html[data-ui-theme='liquidglass'][data-theme='dark'] .bento-tile {
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),var(--shadow) !important;
+}
+html[data-ui-theme='liquidglass'] .sidebar,
+html[data-ui-theme='liquidglass'] .topbar {
+  background:var(--panel-2) !important;
+  backdrop-filter:blur(24px) saturate(1.5); -webkit-backdrop-filter:blur(24px) saturate(1.5);
+}
+html[data-ui-theme='liquidglass'] .btn.primary {
+  background:var(--theme-grad) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 18px -6px var(--t-glow) !important;
+}
+html[data-ui-theme='liquidglass'] .nav-item.active {
+  box-shadow:inset 0 0 0 1px rgba(10,132,255,.34),0 4px 18px -8px rgba(10,132,255,.55) !important;
+}
+html[data-ui-theme='liquidglass'] .btn,
+html[data-ui-theme='liquidglass'] .nav-item,
+html[data-ui-theme='liquidglass'] .card,
+html[data-ui-theme='liquidglass'] .theme-choice {
+  transition:transform .24s cubic-bezier(.2,.9,.28,1.25),box-shadow .24s ease,border-color .2s ease,background .2s ease !important;
+}
+html[data-ui-theme='liquidglass'] .btn:hover,
+html[data-ui-theme='liquidglass'] .nav-item:hover { transform:translateY(-1px) scale(1.015); }
+html[data-ui-theme='liquidglass'] .btn:active,
+html[data-ui-theme='liquidglass'] .nav-item:active { transform:scale(.96); }
+@keyframes liquidDrift {
+  from { transform:translate3d(-2%,-1%,0) scale(1); opacity:.85; }
+  to   { transform:translate3d(3%,2%,0) scale(1.1); opacity:1; }
+}
+
 /* ---------- 7. 动效降级：尊重「减少动态效果」与系统偏好 ---------- */
 html[data-ui-theme] .app-shell.no-motion *,
 html[data-ui-theme] .app-shell.no-motion *::before,
@@ -635,6 +748,12 @@ html[data-ui-theme] .app-shell.no-motion {
 }
 html[data-ui-theme='aurora'] .app-shell.no-motion .panel,
 html[data-ui-theme='aurora'] .app-shell.no-motion .card { background:var(--panel) !important; }
+html[data-ui-theme='liquidglass'] .app-shell.no-motion .panel,
+html[data-ui-theme='liquidglass'] .app-shell.no-motion .card,
+html[data-ui-theme='liquidglass'] .app-shell.no-motion .stat-card,
+html[data-ui-theme='liquidglass'] .app-shell.no-motion .set-card,
+html[data-ui-theme='liquidglass'] .app-shell.no-motion .bento-tile { background:var(--t-glass-solid) !important; }
+html[data-ui-theme='liquidglass'] .app-shell.no-motion::before { display:none; }
 @media (prefers-reduced-motion:reduce) {
   html[data-ui-theme] .app-shell *,
   html[data-ui-theme] .app-shell *::before,

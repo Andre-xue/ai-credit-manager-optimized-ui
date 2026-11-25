@@ -62,6 +62,12 @@ export const UI_THEMES: readonly UiThemeDefinition[] = [
     dark: false, colors: ['#d65336', '#ece7dd', '#25221e'],
     surface: { bg: '#eee9df', panel: '#faf7f0', text: '#27231f', muted: '#7f756a', primary: '#c54c31' },
   },
+  {
+    id: 'liquidglass', letter: 'I', name: '液态玻璃', english: 'Liquid Glass',
+    description: '苹果液态玻璃 · 半透明折射 · 悬浮高光', interaction: '折射高光、焦点吸附、弹性回弹',
+    dark: false, colors: ['#0a84ff', '#bfe4ff', '#1c1c1e'],
+    surface: { bg: '#eaf2fb', panel: '#ffffffcc', text: '#1c1c1e', muted: '#6e7a8a', primary: '#0a84ff' },
+  },
 ]
 
 export const DEFAULT_UI_THEME: UiThemeId = 'aurora'

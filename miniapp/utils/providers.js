@@ -97,7 +97,7 @@ function today() {
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
 }
 
-/* ---------- 全平台外观主题 A–H（仅显示层，与业务数据隔离） ----------
+/* ---------- 全平台外观主题 A–I（仅显示层，与业务数据隔离） ----------
    Web / Docker / 桌面 / 原生 WebView 使用 src/uiThemes.ts 的同名目录；
    此处为小程序原生实现，读写独立键 acm.mini.theme，同时镜像到 settings.uiTheme。 */
 var UI_THEMES = [
@@ -116,7 +116,9 @@ var UI_THEMES = [
   { id:'hud', letter:'G', name:'星舰 HUD', desc:'深空界面 · 精密刻度', interaction:'扫描光效、实时脉冲',
     navBg:'#0b1821', tabBg:'#0b1821', tabColor:'#5f8e8b', tabSelected:'#64ffda', windowBg:'#050d13', dark:true },
   { id:'editorial', letter:'H', name:'数字杂志', desc:'编辑排版 · 纸感层次', interaction:'章节转场、细节展开',
-    navBg:'#c54c31', tabBg:'#faf7f0', tabColor:'#9c9082', tabSelected:'#c54c31', windowBg:'#eee9df', dark:false }
+    navBg:'#c54c31', tabBg:'#faf7f0', tabColor:'#9c9082', tabSelected:'#c54c31', windowBg:'#eee9df', dark:false },
+  { id:'liquidglass', letter:'I', name:'液态玻璃', desc:'苹果液态玻璃 · 半透明折射', interaction:'折射高光、焦点吸附',
+    navBg:'#0a84ff', tabBg:'#ffffff', tabColor:'#8592a3', tabSelected:'#0a84ff', windowBg:'#eaf2fb', dark:false }
 ]
 var UI_THEME_IDS = UI_THEMES.map(function (t) { return t.id })
 var UI_THEME_DEFAULT = 'aurora'

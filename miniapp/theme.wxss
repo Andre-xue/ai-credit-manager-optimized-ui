@@ -1,12 +1,12 @@
 /* ============================================================
-   AI 魔方小程序 · 全平台外观主题 A–H
+   AI 魔方小程序 · 全平台外观主题 A–I
    ------------------------------------------------------------
    仅作用于显示层：设计令牌、卡片材质、导航与标签栏配色。
    与 Web 端 src/uiThemes.ts 使用同一组主题 id / 名称，便于跨端一致。
    用法：页面根 view 挂 class="... ui-{{uiTheme}}"，变量自动向下继承。
    ============================================================ */
 
-/* ---------- 八套主题色板 ---------- */
+/* ---------- 九套主题色板 ---------- */
 .ui-precision {
   --bg:#f4f7fb; --panel:#ffffff; --panel-2:#f8fafc;
   --border:#e2e8f0; --border-strong:#cbd5e1;
@@ -87,41 +87,59 @@
   --red:#a63c2f; --red-soft:#f8e7e3; --radius:6rpx; --shadow:0 2rpx 10rpx rgba(60,50,38,.08);
   --glow:rgba(197,76,49,.22);
 }
+.ui-liquidglass {
+  --bg:#eaf2fb; --panel:#ffffff; --panel-2:#f0f6ff;
+  --border:rgba(255,255,255,.85); --border-strong:rgba(120,150,190,.35);
+  --text:#1c1c1e; --text-2:#4a5568; --text-3:#8592a3;
+  --primary:#0a84ff; --primary-2:#7d7cff; --primary-soft:#e3f0ff; --on-primary:#ffffff;
+  --grad-a:#0a84ff; --grad-b:#4f9dff; --grad-c:#7d7cff;
+  --green:#0a9d6b; --green-soft:#e3f7ef; --amber:#b87b0e; --amber-soft:#fff5df;
+  --red:#e0433e; --red-soft:#fdeaea; --radius:32rpx; --shadow:0 8rpx 28rpx rgba(40,80,140,.14);
+  --glow:rgba(10,132,255,.34);
+}
 
 /* ---------- 主题化基础组件（覆盖 app.wxss 中的硬编码） ---------- */
 .ui-precision .card, .ui-studio .card, .ui-command .card, .ui-island .card,
-.ui-aurora .card, .ui-lumin .card, .ui-hud .card, .ui-editorial .card {
+.ui-aurora .card, .ui-lumin .card, .ui-hud .card, .ui-editorial .card, .ui-liquidglass .card {
   border-radius:var(--radius); box-shadow:var(--shadow);
 }
 .ui-precision .banner, .ui-studio .banner, .ui-command .banner, .ui-island .banner,
-.ui-aurora .banner, .ui-lumin .banner, .ui-hud .banner, .ui-editorial .banner {
+.ui-aurora .banner, .ui-lumin .banner, .ui-hud .banner, .ui-editorial .banner, .ui-liquidglass .banner {
   background:var(--primary-soft); border-color:var(--border-strong); color:var(--primary);
 }
 .ui-precision .btn.primary, .ui-studio .btn.primary, .ui-command .btn.primary, .ui-island .btn.primary,
-.ui-aurora .btn.primary, .ui-lumin .btn.primary, .ui-hud .btn.primary, .ui-editorial .btn.primary {
+.ui-aurora .btn.primary, .ui-lumin .btn.primary, .ui-hud .btn.primary, .ui-editorial .btn.primary, .ui-liquidglass .btn.primary {
   background:linear-gradient(120deg,var(--grad-a),var(--grad-b) 55%,var(--grad-c));
   color:var(--on-primary); border-color:transparent;
 }
 .ui-precision .tag.gray, .ui-studio .tag.gray, .ui-command .tag.gray, .ui-island .tag.gray,
-.ui-aurora .tag.gray, .ui-lumin .tag.gray, .ui-hud .tag.gray, .ui-editorial .tag.gray {
+.ui-aurora .tag.gray, .ui-lumin .tag.gray, .ui-hud .tag.gray, .ui-editorial .tag.gray, .ui-liquidglass .tag.gray {
   background:var(--panel-2); color:var(--text-2);
 }
 .ui-precision .input, .ui-studio .input, .ui-command .input, .ui-island .input,
-.ui-aurora .input, .ui-lumin .input, .ui-hud .input, .ui-editorial .input {
+.ui-aurora .input, .ui-lumin .input, .ui-hud .input, .ui-editorial .input, .ui-liquidglass .input {
   background:var(--panel); color:var(--text);
 }
 .ui-precision .section-title, .ui-studio .section-title, .ui-command .section-title, .ui-island .section-title,
-.ui-aurora .section-title, .ui-lumin .section-title, .ui-hud .section-title, .ui-editorial .section-title {
+.ui-aurora .section-title, .ui-lumin .section-title, .ui-hud .section-title, .ui-editorial .section-title, .ui-liquidglass .section-title {
   border-bottom-color:var(--border);
 }
 .ui-precision .setting-row, .ui-studio .setting-row, .ui-command .setting-row, .ui-island .setting-row,
-.ui-aurora .setting-row, .ui-lumin .setting-row, .ui-hud .setting-row, .ui-editorial .setting-row,
+.ui-aurora .setting-row, .ui-lumin .setting-row, .ui-hud .setting-row, .ui-editorial .setting-row, .ui-liquidglass .setting-row,
 .ui-precision .kv, .ui-studio .kv, .ui-command .kv, .ui-island .kv,
-.ui-aurora .kv, .ui-lumin .kv, .ui-hud .kv, .ui-editorial .kv {
+.ui-aurora .kv, .ui-lumin .kv, .ui-hud .kv, .ui-editorial .kv, .ui-liquidglass .kv {
   border-bottom-color:var(--border);
 }
 
-/* 专属材质：E 极光玻璃 / G HUD 网格 / H 纸感 / D 弹性 */
+/* 专属材质：E 极光玻璃 / G HUD 网格 / H 纸感 / D 弹性 / I 液态玻璃 */
+.ui-liquidglass .card {
+  background:linear-gradient(155deg,rgba(255,255,255,.72),rgba(255,255,255,.42));
+  border:2rpx solid rgba(255,255,255,.85);
+  box-shadow:inset 0 2rpx 0 rgba(255,255,255,.9),0 10rpx 30rpx rgba(40,80,140,.14) !important;
+}
+.ui-liquidglass .btn.primary {
+  box-shadow:inset 0 2rpx 0 rgba(255,255,255,.45),0 8rpx 20rpx rgba(10,132,255,.35);
+}
 .ui-aurora .card {
   background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.01)),var(--panel);
   border-color:rgba(169,150,255,.24);
@@ -134,7 +152,7 @@
 .ui-island .btn:active, .ui-island .card:active { transform:scale(.985); }
 .ui-studio .card { padding-left:36rpx; padding-right:36rpx; }
 
-/* ---------- 设置页：八套主题选择画廊 ---------- */
+/* ---------- 设置页：九套主题选择画廊 ---------- */
 .theme-block { padding:4rpx 0 8rpx; }
 .theme-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:18rpx; padding:4rpx 0; }
 .theme-heading.collapsed { margin-bottom:0; }
@@ -182,3 +200,4 @@
 .sw-lumin     { --sw-bg:#f7f9fc; --sw-side:#e4eaf3; --sw-panel:#ffffff; --sw-primary:#0969da; --sw-glow:rgba(124,58,237,.35); }
 .sw-hud       { --sw-bg:#050d13; --sw-side:#10222d; --sw-panel:#0b1821; --sw-primary:#64ffda; --sw-glow:rgba(56,189,248,.5); }
 .sw-editorial { --sw-bg:#eee9df; --sw-side:#ded6c7; --sw-panel:#faf7f0; --sw-primary:#c54c31; --sw-glow:rgba(197,76,49,.35); }
+.sw-liquidglass { --sw-bg:#dceaf9; --sw-side:#c3d9f2; --sw-panel:#ffffffd9; --sw-primary:#0a84ff; --sw-glow:rgba(10,132,255,.55); }
